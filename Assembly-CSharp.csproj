@@ -55,7 +55,11 @@
   <ItemGroup>
     <Compile Include="Assets\URPDemo\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\URPDemo\Scripts\SimpleCameraController.cs" />
-    <Compile Include="Assets\Tabs\1-Basics\MovePointer.cs" />
+    <Compile Include="Assets\Tabs\1-Basics\GameObjAndScripts\MovePointer.cs" />
+    <Compile Include="Assets\Tabs\1-Basics\BuildingAGraph\GraphAni.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Tabs\1-Basics\BuildingAGraph\PointerSurface.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
