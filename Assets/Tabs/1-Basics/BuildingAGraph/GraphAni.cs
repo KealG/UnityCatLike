@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BasicChapter;
 
 public class GraphAni : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GraphAni : MonoBehaviour
 
     Transform[] points;
 
+    [SerializeField, Range(0, 1)]
+    int function;
 
     private void Awake()
     {
@@ -47,7 +50,14 @@ public class GraphAni : MonoBehaviour
                 if (curPoint != null)
                 {
                     var curLocalPos = curPoint.localPosition;
-                    curLocalPos.y = Mathf.Sin(Mathf.PI * (curLocalPos.x + Time.time));//  * curLocalPos.x * curLocalPos.x;//Mathf.Pow(, 3f);
+                    if (function == 0)
+                    {
+                        curLocalPos.y = FunctionLibrary.Wave(curLocalPos.x, Time.time);//Mathf.Sin(Mathf.PI * (curLocalPos.x + Time.time));//  * curLocalPos.x * curLocalPos.x;//Mathf.Pow(, 3f);
+                    }
+                    else
+                    {
+                        curLocalPos.y = FunctionLibrary.MultiWave(curLocalPos.x, Time.time);//Mathf.Sin(Mathf.PI * (curLocalPos.x + Time.time));//  * curLocalPos.x * curLocalPos.x;//Mathf.Pow(, 3f);
+                    }                    
                     curPoint.localPosition = curLocalPos;
                 }
             }            
