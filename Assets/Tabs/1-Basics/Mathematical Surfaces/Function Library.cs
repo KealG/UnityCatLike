@@ -13,7 +13,7 @@ namespace BasicChapter
 
         public static float MultiWave(float x, float t)
         {
-            float y = Mathf.Sin(Mathf.PI * (x + t));
+            float y = Mathf.Sin(Mathf.PI * (x + 0.5f * t));
             y += Mathf.Sin(2f * Mathf.PI * Mathf.Pow((x + t), 1)) * 0.5f;
             return y * (2f / 3f);
         }
