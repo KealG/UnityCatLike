@@ -115,7 +115,7 @@ QualitySettings:
     customRenderPipeline: {fileID: 11400000, guid: 19ba41d7c0026c3459d37c2fe90c55a0, type: 2}
     excludedTargetPlatforms: []
   - serializedVersion: 2
-    name: Ultra
+    name: CustomRP
     pixelLightCount: 2
     shadows: 2
     shadowResolution: 1
@@ -129,7 +129,7 @@ QualitySettings:
     skinWeights: 2
     textureQuality: 0
     anisotropicTextures: 1
-    antiAliasing: 2
+    antiAliasing: 0
     softParticles: 0
     softVegetation: 1
     realtimeReflectionProbes: 1
