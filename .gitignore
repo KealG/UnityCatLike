@@ -6,7 +6,12 @@
 *.user
 *.userosscache
 *.sln.docstates
+
+# User-specific files
 Assets/URPDemo/*
+
+# ASE Plugin
+Assets/AmplifyShaderEditor/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
