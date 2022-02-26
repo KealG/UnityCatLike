@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ASEHalfLambert
-  m_Shader: {fileID: 4800000, guid: 7276d2e808e0a98438a07d9cb0e10406, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5d2ddea5a7aa3284ab6f79f7213858dd, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -90,6 +90,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AlphaClip: 0
+    - _AlphaCutoff: 0.5
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
