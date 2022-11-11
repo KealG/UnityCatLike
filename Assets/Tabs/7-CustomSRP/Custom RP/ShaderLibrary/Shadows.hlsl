@@ -46,6 +46,8 @@ float SampleDirectionalShadowAtlas (float3 positionSTS) {
 struct ShadowData {
 	int cascadeIndex;
     float strength;
+    //用于级联之间的混合值
+    float cascadeBlend;
 };
 
 float FilterDirectionalShadow (float3 positionSTS) {
@@ -78,6 +80,19 @@ float GetDirectionalShadowAttenuation (DirectionalShadowData directional, Shadow
 	).xyz;
     //引入PCF采样实现软阴影
 	float shadow = FilterDirectionalShadow(positionSTS);
+    //级联之间过渡的混合
+    if (global.cascadeBlend < 1.0) 
+    {
+		normalBias = surfaceWS.normal *
+			(directional.normalBias * _CascadeData[global.cascadeIndex + 1].y);
+		positionSTS = mul(
+			_DirectionalShadowMatrices[directional.tileIndex + 1],
+			float4(surfaceWS.position + normalBias, 1.0)
+		).xyz;
+		shadow = lerp(
+			FilterDirectionalShadow(positionSTS), shadow, global.cascadeBlend
+		);
+	}
 	return  lerp(1.0, shadow, directional.strength);
 }
 
@@ -89,6 +104,7 @@ float FadedShadowStrength (float distance, float scale, float fade) {
 
 ShadowData GetShadowData (Surface surfaceWS) {
 	ShadowData data;
+    data.cascadeBlend = 1.0;
     //对超出边界的阴影进行平滑处理
     data.strength =  FadedShadowStrength(
 		surfaceWS.depth, _ShadowDistanceFade.x, _ShadowDistanceFade.y
@@ -100,11 +116,16 @@ ShadowData GetShadowData (Surface surfaceWS) {
 		float distanceSqr = DistanceSquared(surfaceWS.position, sphere.xyz);
 		if (distanceSqr < sphere.w) 
         {
+            float fade = FadedShadowStrength(
+				distanceSqr, _CascadeData[i].x, _ShadowDistanceFade.z
+			);
             //对最大边界的级联采样进行平滑处理
             if (i == _CascadeCount - 1) {
-				data.strength *= FadedShadowStrength(
-					distanceSqr,  _CascadeData[i].x, _ShadowDistanceFade.z
-				);
+				data.strength *= fade;
+			}
+            //对非最大边界的级联采样进行混合处理
+            else {
+				data.cascadeBlend = fade;
 			}
 			break;
 		}
