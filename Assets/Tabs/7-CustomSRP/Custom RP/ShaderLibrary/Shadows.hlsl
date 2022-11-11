@@ -61,7 +61,14 @@ ShadowData GetShadowData (Surface surfaceWS) {
 		float4 sphere = _CascadeCullingSpheres[i];
         //片段像素点对应的世界坐标与不同级联剔除球体中心的几何距离
 		float distanceSqr = DistanceSquared(surfaceWS.position, sphere.xyz);
-		if (distanceSqr < sphere.w) {
+		if (distanceSqr < sphere.w) 
+        {
+            //对最大边界的级联采样进行平滑处理
+            if (i == _CascadeCount - 1) {
+				data.strength *= FadedShadowStrength(
+					distanceSqr, 1.0 / sphere.w, _ShadowDistanceFade.z
+				);
+			}
 			break;
 		}
 	}
