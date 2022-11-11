@@ -164,6 +164,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.DefaultCompany.Project
     Standalone: com.DefaultCompany.Project
   buildNumber:
     Standalone: 0
@@ -614,6 +615,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: AMPLIFY_SHADER_EDITOR
+    7: AMPLIFY_SHADER_EDITOR
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
