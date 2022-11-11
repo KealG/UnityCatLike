@@ -164,9 +164,12 @@ public class Shadows
         int tileOffset = index * cascadeCount;
         Vector3 ratios = settings.directional.CascadeRatios;
 
+        float cullingFactor = Mathf.Max(0f, 0.8f - settings.directional.cascadeFade);
         for (int i = 0; i < cascadeCount; i++)
         {
             cullingResults.ComputeDirectionalShadowMatricesAndCullingPrimitives(light.visibleLightIndex, i, cascadeCount, ratios, tileSize, light.nearPlaneOffset, out Matrix4x4 viewMatrix, out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
+            //该值是一个调节用于执行剔除的前一个级联的半径的因素
+            splitData.shadowCascadeBlendCullingFactor = cullingFactor;
 
             shadowSettings.splitData = splitData;
             if (index == 0)
