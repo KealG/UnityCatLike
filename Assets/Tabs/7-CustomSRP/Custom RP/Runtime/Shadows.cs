@@ -77,7 +77,11 @@ public class Shadows
     }
 
     static int dirShadowAtlasId = Shader.PropertyToID("_DirectionalShadowAtlas"),
-        dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices");
+        dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices"),
+        cascadeCountId = Shader.PropertyToID("_CascadeCount"),
+        cascadeCullingSpheresId = Shader.PropertyToID("_CascadeCullingSpheres");
+
+    static Vector4[] cascadeCullingSpheres = new Vector4[maxCascades];
 
     //Each cascades shadowmap need a itself's VP Matrix;
     static Matrix4x4[]
@@ -105,6 +109,12 @@ public class Shadows
             RenderDirectionalShadows(i, split, tileSize);
         }
 
+        //渲染级联后将级联计数和球体发送到 GPU
+        buffer.SetGlobalInt(cascadeCountId, settings.directional.cascadeCount);
+        buffer.SetGlobalVectorArray(
+            cascadeCullingSpheresId, cascadeCullingSpheres
+        );
+
         buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
         buffer.EndSample(bufferName);
         ExecuteBuffer();
@@ -130,6 +140,13 @@ public class Shadows
             cullingResults.ComputeDirectionalShadowMatricesAndCullingPrimitives(light.visibleLightIndex, i, cascadeCount, ratios, tileSize, 0f, out Matrix4x4 viewMatrix, out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
 
             shadowSettings.splitData = splitData;
+            if (index == 0)
+            {
+                Vector4 cullingSphere = splitData.cullingSphere;
+                cullingSphere.w *= cullingSphere.w;
+                //需要着色器中的球体来检查表面片段是否位于其中，这可以通过比较球体中心的平方距离与其平方半径来完成。所以让我们存储正方形半径，这样我们就不必在着色器中计算它
+                cascadeCullingSpheres[i] = cullingSphere;
+            }
             int tileIndex = tileOffset + i;
             dirShadowMatrices[tileIndex] = ConvertToAtlasMatrix(
                 projectionMatrix * viewMatrix,
