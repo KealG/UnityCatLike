@@ -10,7 +10,10 @@ struct Surface {
 	float smoothness;
 	//WorldPosition
 	float3 position;
+	//ViewSpace depth
 	float depth;
+	
+	float dither;
 
 };
 

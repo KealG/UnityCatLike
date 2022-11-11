@@ -43,6 +43,13 @@ public class ShadowSettings
         public float cascadeFade;
 
         public FilterMode filter;
+
+        public enum CascadeBlendMode
+        {
+            Hard, Soft, Dither
+        }
+
+        public CascadeBlendMode cascadeBlend;
     }
 
     public Directional directional = new Directional
@@ -53,6 +60,7 @@ public class ShadowSettings
         cascadeRatio2 = 0.25f,
         cascadeRatio3 = 0.5f,
         cascadeFade = 0.1f,
+        cascadeBlend = Directional.CascadeBlendMode.Hard,
         filter = FilterMode.PCF2x2,
     };
 

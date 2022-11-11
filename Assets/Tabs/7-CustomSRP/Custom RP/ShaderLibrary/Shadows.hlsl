@@ -134,6 +134,17 @@ ShadowData GetShadowData (Surface surfaceWS) {
     if (i == _CascadeCount) {
 		data.strength = 0.0;
 	}
+#if defined(_CASCADE_BLEND_DITHER)
+    //当使用抖动混合时，如果我们不在最后一个级联中，如果混合值小于抖动值，则跳转到下一个级联
+    else if (data.cascadeBlend < surfaceWS.dither) {
+        i += 1;
+    }
+#endif
+
+#if !defined(_CASCADE_BLEND_SOFT)
+    //当未使用PCF软阴影时，将混合值设置为默认值
+	data.cascadeBlend = 1.0;
+#endif
 
 	data.cascadeIndex = i;
 	return data;
