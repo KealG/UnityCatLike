@@ -8,7 +8,10 @@ struct Surface {
 	float alpha;
 	float metallic;
 	float smoothness;
+	//WorldPosition
 	float3 position;
+	float depth;
+
 };
 
 #endif
