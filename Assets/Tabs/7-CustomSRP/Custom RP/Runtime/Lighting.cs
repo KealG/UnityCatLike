@@ -22,14 +22,18 @@ public class Lighting {
 	};
 
 	CullingResults cullingResults;
-
-	public void Setup (
-		ScriptableRenderContext context, CullingResults cullingResults
-	) {
+	
+    Shadows shadows = new Shadows();
+    public void Setup (
+		ScriptableRenderContext context, CullingResults cullingResults,
+        ShadowSettings shadowSettings
+    ) {
 		this.cullingResults = cullingResults;
 		buffer.BeginSample(bufferName);
-		SetupLights();
-		buffer.EndSample(bufferName);
+        shadows.Setup(context, cullingResults, shadowSettings);
+        SetupLights();
+        shadows.Render();
+        buffer.EndSample(bufferName);
 		context.ExecuteCommandBuffer(buffer);
 		buffer.Clear();
 	}
@@ -55,5 +59,11 @@ public class Lighting {
 	void SetupDirectionalLight (int index, ref VisibleLight visibleLight) {
 		dirLightColors[index] = visibleLight.finalColor;
 		dirLightDirections[index] = -visibleLight.localToWorldMatrix.GetColumn(2);
-	}
+        shadows.ReserveDirectionalShadows(visibleLight.light, index);
+    }
+
+    public void Cleanup()
+    {
+        shadows.Cleanup();
+    }
 }

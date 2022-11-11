@@ -100,6 +100,8 @@
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraRenderer.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Lighting.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ShadowSettings.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Shadows.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter14\Chapter14-Hatching.shader" />
