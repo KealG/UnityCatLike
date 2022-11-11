@@ -28,23 +28,25 @@ float SampleDirectionalShadowAtlas (float3 positionSTS) {
 	);
 }
 
-//返回阴影衰减函数
-float GetDirectionalShadowAttenuation (DirectionalShadowData data, Surface surfaceWS) {
-    if (data.strength <= 0.0) {
-		return 1.0;
-	}
-	float3 positionSTS = mul(
-		_DirectionalShadowMatrices[data.tileIndex],
-		float4(surfaceWS.position, 1.0)
-	).xyz;
-	float shadow = SampleDirectionalShadowAtlas(positionSTS);
-	return  lerp(1.0, shadow, data.strength);
-}
-
 struct ShadowData {
 	int cascadeIndex;
     float strength;
 };
+
+//返回阴影衰减函数
+float GetDirectionalShadowAttenuation (DirectionalShadowData directional, ShadowData global, Surface surfaceWS) {
+    if (directional.strength <= 0.0) {
+		return 1.0;
+	}
+    float3 normalBias = surfaceWS.normal * _CascadeData[global.cascadeIndex].y;
+	float3 positionSTS = mul(
+		_DirectionalShadowMatrices[directional.tileIndex],
+		float4(surfaceWS.position + normalBias, 1.0)
+	).xyz;
+	float shadow = SampleDirectionalShadowAtlas(positionSTS);
+	return  lerp(1.0, shadow, directional.strength);
+}
+
 
 float FadedShadowStrength (float distance, float scale, float fade) {
 	return saturate((1.0 - distance * scale) * fade);
@@ -55,7 +57,7 @@ ShadowData GetShadowData (Surface surfaceWS) {
 	ShadowData data;
     //对超出边界的阴影进行平滑处理
     data.strength =  FadedShadowStrength(
-		surfaceWS.depth, _CascadeData[i].x, _ShadowDistanceFade.y
+		surfaceWS.depth, _ShadowDistanceFade.x, _ShadowDistanceFade.y
 	);
     int i;
 	for (i = 0; i < _CascadeCount; i++) {
@@ -67,7 +69,7 @@ ShadowData GetShadowData (Surface surfaceWS) {
             //对最大边界的级联采样进行平滑处理
             if (i == _CascadeCount - 1) {
 				data.strength *= FadedShadowStrength(
-					distanceSqr, 1.0 / sphere.w, _ShadowDistanceFade.z
+					distanceSqr,  _CascadeData[i].x, _ShadowDistanceFade.z
 				);
 			}
 			break;
