@@ -20,6 +20,7 @@ CBUFFER_END
 struct DirectionalShadowData {
 	float strength;
 	int tileIndex;
+    float normalBias;
 };
 
 float SampleDirectionalShadowAtlas (float3 positionSTS) {
