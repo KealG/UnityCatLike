@@ -40,7 +40,24 @@ public class CustomShaderGUICatLike : ShaderGUI {
 		}
 	}
 
-	public override void OnGUI (
+    enum ShadowMode
+    {
+        On, Clip, Dither, Off
+    }
+
+    ShadowMode Shadows
+    {
+        set
+        {
+            if (SetProperty("_Shadows", (float)value))
+            {
+                SetKeyword("_SHADOWS_CLIP", value == ShadowMode.Clip);
+                SetKeyword("_SHADOWS_DITHER", value == ShadowMode.Dither);
+            }
+        }
+    }
+
+    public override void OnGUI (
 		MaterialEditor materialEditor, MaterialProperty[] properties
 	) {
 		base.OnGUI(materialEditor, properties);
