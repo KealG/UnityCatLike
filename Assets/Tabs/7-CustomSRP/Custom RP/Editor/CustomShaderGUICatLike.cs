@@ -60,7 +60,8 @@ public class CustomShaderGUICatLike : ShaderGUI {
     public override void OnGUI (
 		MaterialEditor materialEditor, MaterialProperty[] properties
 	) {
-		base.OnGUI(materialEditor, properties);
+        EditorGUI.BeginChangeCheck();
+        base.OnGUI(materialEditor, properties);
 		editor = materialEditor;
 		materials = materialEditor.targets;
 		this.properties = properties;
@@ -73,7 +74,11 @@ public class CustomShaderGUICatLike : ShaderGUI {
 			FadePreset();
 			TransparentPreset();
 		}
-	}
+        if (EditorGUI.EndChangeCheck())
+        {
+            SetShadowCasterPass();
+        }
+    }
 
 	void OpaquePreset () {
 		if (PresetButton("Opaque")) {
@@ -157,4 +162,18 @@ public class CustomShaderGUICatLike : ShaderGUI {
 			}
 		}
 	}
+
+    void SetShadowCasterPass()
+    {
+        MaterialProperty shadows = FindProperty("_Shadows", properties, false);
+        if (shadows == null || shadows.hasMixedValue)
+        {
+            return;
+        }
+        bool enabled = shadows.floatValue < (float)ShadowMode.Off;
+        foreach (Material m in materials)
+        {
+            m.SetShaderPassEnabled("ShadowCaster", enabled);
+        }
+    }
 }
