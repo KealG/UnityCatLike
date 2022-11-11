@@ -220,12 +220,14 @@ public class Shadows
     void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
     {
         float texelSize = 2f * cullingSphere.w / tileSize;
+        float filterSize = texelSize * ((float)settings.directional.filter + 1f);
+        cullingSphere.w -= filterSize;
         cullingSphere.w *= cullingSphere.w;
         //需要着色器中的球体来检查表面片段是否位于其中，这可以通过比较球体中心的平方距离与其平方半径来完成。所以让我们存储正方形半径，这样我们就不必在着色器中计算它
         cascadeCullingSpheres[index] = cullingSphere;
         cascadeData[index] = new Vector4(
             1f / cullingSphere.w,
-            texelSize * 1.4142136f
+            filterSize * 1.4142136f
         );        
     }
 
