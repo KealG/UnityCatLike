@@ -60,5 +60,5 @@
 		}
 	}
 
-	CustomEditor "CustomShaderGUI"
+	CustomEditor "CustomShaderGUICatLike"
 }

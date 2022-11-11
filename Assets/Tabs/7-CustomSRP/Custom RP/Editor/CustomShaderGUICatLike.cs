@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
+
 public class CustomShaderGUICatLike : ShaderGUI {
 
 	MaterialEditor editor;
@@ -74,7 +75,7 @@ public class CustomShaderGUICatLike : ShaderGUI {
 			FadePreset();
 			TransparentPreset();
 		}
-        if (EditorGUI.EndChangeCheck())
+		if (EditorGUI.EndChangeCheck())
         {
             SetShadowCasterPass();
         }
@@ -83,7 +84,8 @@ public class CustomShaderGUICatLike : ShaderGUI {
 	void OpaquePreset () {
 		if (PresetButton("Opaque")) {
 			Clipping = false;
-			PremultiplyAlpha = false;
+            Shadows = ShadowMode.On;
+            PremultiplyAlpha = false;
 			SrcBlend = BlendMode.One;
 			DstBlend = BlendMode.Zero;
 			ZWrite = true;
@@ -95,7 +97,8 @@ public class CustomShaderGUICatLike : ShaderGUI {
 		if (PresetButton("Clip")) {
 			Clipping = true;
 			PremultiplyAlpha = false;
-			SrcBlend = BlendMode.One;
+            Shadows = ShadowMode.Clip;
+            SrcBlend = BlendMode.One;
 			DstBlend = BlendMode.Zero;
 			ZWrite = true;
 			RenderQueue = RenderQueue.AlphaTest;
@@ -106,7 +109,8 @@ public class CustomShaderGUICatLike : ShaderGUI {
 		if (PresetButton("Fade")) {
 			Clipping = false;
 			PremultiplyAlpha = false;
-			SrcBlend = BlendMode.SrcAlpha;
+            Shadows = ShadowMode.Dither;
+            SrcBlend = BlendMode.SrcAlpha;
 			DstBlend = BlendMode.OneMinusSrcAlpha;
 			ZWrite = false;
 			RenderQueue = RenderQueue.Transparent;
@@ -118,7 +122,8 @@ public class CustomShaderGUICatLike : ShaderGUI {
 			Clipping = false;
 			PremultiplyAlpha = true;
 			SrcBlend = BlendMode.One;
-			DstBlend = BlendMode.OneMinusSrcAlpha;
+            Shadows = ShadowMode.Dither;
+            DstBlend = BlendMode.OneMinusSrcAlpha;
 			ZWrite = false;
 			RenderQueue = RenderQueue.Transparent;
 		}
@@ -174,6 +179,6 @@ public class CustomShaderGUICatLike : ShaderGUI {
         foreach (Material m in materials)
         {
             m.SetShaderPassEnabled("ShadowCaster", enabled);
-        }
+        }        
     }
 }
