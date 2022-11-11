@@ -135,6 +135,7 @@
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\11\ScrollingBlackGround.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Common\BumpedSpecular.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter10\Chapter10-Reflection.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\ShadowCasterPass.hlsl" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter9\Chapter9-AlphaBlendWithShadow.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter11\Chapter11-Water.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\8\AlphaBlend.shader" />
