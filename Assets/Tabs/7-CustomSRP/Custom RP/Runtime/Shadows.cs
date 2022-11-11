@@ -34,7 +34,7 @@ public class Shadows
         this.context = context;
         this.cullingResults = cullingResults;
         this.settings = settings;
-        ShadowedDirectionalLightCount = 0;        
+        ShadowedDirectionalLightCount = 0;
     }
 
     void ExecuteBuffer()
@@ -43,7 +43,7 @@ public class Shadows
         buffer.Clear();
     }
 
-    public Vector2 ReserveDirectionalShadows(Light light, int visibleLightIndex) 
+    public Vector2 ReserveDirectionalShadows(Light light, int visibleLightIndex)
     {
         if (ShadowedDirectionalLightCount < maxShadowedDirectionalLightCount &&
             light.shadows != LightShadows.None && light.shadowStrength > 0f &&
@@ -80,15 +80,19 @@ public class Shadows
         dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices"),
         cascadeCountId = Shader.PropertyToID("_CascadeCount"),
         cascadeCullingSpheresId = Shader.PropertyToID("_CascadeCullingSpheres"),
+        //用于提高阴影质量获取数据判断适当的Bias值的数据结构
+        cascadeDataId = Shader.PropertyToID("_CascadeData"),
         shadowDistanceFadeId = Shader.PropertyToID("_ShadowDistanceFade");
 
-    static Vector4[] cascadeCullingSpheres = new Vector4[maxCascades];
+    static Vector4[] cascadeCullingSpheres = new Vector4[maxCascades],
+        //x为级联球体半径的倒数
+        cascadeData = new Vector4[maxCascades];
 
     //Each cascades shadowmap need a itself's VP Matrix;
     static Matrix4x4[]
         dirShadowMatrices = new Matrix4x4[maxShadowedDirectionalLightCount * maxCascades];
 
-    void RenderDirectionalShadows() 
+    void RenderDirectionalShadows()
     {
         int atlasSize = (int)settings.directional.atlasSize;
         buffer.GetTemporaryRT(dirShadowAtlasId, atlasSize, atlasSize,
@@ -115,7 +119,7 @@ public class Shadows
         buffer.SetGlobalVectorArray(
             cascadeCullingSpheresId, cascadeCullingSpheres
         );
-
+        buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
         buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
 
         float f = 1f - settings.directional.cascadeFade;
@@ -131,7 +135,7 @@ public class Shadows
         ExecuteBuffer();
     }
 
-    void RenderDirectionalShadows(int index, int split, int tileSize) 
+    void RenderDirectionalShadows(int index, int split, int tileSize)
     {
         ShadowedDirectionalLight light = ShadowedDirectionalLights[index];
         var shadowSettings =
@@ -147,10 +151,8 @@ public class Shadows
             shadowSettings.splitData = splitData;
             if (index == 0)
             {
-                Vector4 cullingSphere = splitData.cullingSphere;
-                cullingSphere.w *= cullingSphere.w;
-                //需要着色器中的球体来检查表面片段是否位于其中，这可以通过比较球体中心的平方距离与其平方半径来完成。所以让我们存储正方形半径，这样我们就不必在着色器中计算它
-                cascadeCullingSpheres[i] = cullingSphere;
+                SetCascadeData(i, splitData.cullingSphere, tileSize);
+
             }
             int tileIndex = tileOffset + i;
             dirShadowMatrices[tileIndex] = ConvertToAtlasMatrix(
@@ -161,7 +163,7 @@ public class Shadows
             ExecuteBuffer();
             context.DrawShadows(ref shadowSettings);
         }
-        
+
     }
 
     Vector2 SetTileViewport(int index, int split, float tileSize)
@@ -196,5 +198,13 @@ public class Shadows
         m.m22 = 0.5f * (m.m22 + m.m32);
         m.m23 = 0.5f * (m.m23 + m.m33);
         return m;
+    }
+
+    void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
+    {
+        cascadeData[index].x = 1f / cullingSphere.w;
+        cullingSphere.w *= cullingSphere.w;
+        //需要着色器中的球体来检查表面片段是否位于其中，这可以通过比较球体中心的平方距离与其平方半径来完成。所以让我们存储正方形半径，这样我们就不必在着色器中计算它
+        cascadeCullingSpheres[index] = cullingSphere;
     }
 }

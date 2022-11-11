@@ -14,6 +14,7 @@ CBUFFER_START(_CustomShadows)
 	float4x4 _DirectionalShadowMatrices[MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT * MAX_CASCADE_COUNT];
     //阴影采样的最大距离InViewSpace
     float4 _ShadowDistanceFade;
+    float4 _CascadeData[MAX_CASCADE_COUNT];
 CBUFFER_END
 
 struct DirectionalShadowData {
@@ -54,7 +55,7 @@ ShadowData GetShadowData (Surface surfaceWS) {
 	ShadowData data;
     //对超出边界的阴影进行平滑处理
     data.strength =  FadedShadowStrength(
-		surfaceWS.depth, _ShadowDistanceFade.x, _ShadowDistanceFade.y
+		surfaceWS.depth, _CascadeData[i].x, _ShadowDistanceFade.y
 	);
     int i;
 	for (i = 0; i < _CascadeCount; i++) {
