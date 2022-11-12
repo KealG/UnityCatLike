@@ -112,6 +112,7 @@
     <None Include="Assets\ZhuangDong\L2\TestSur.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter8\Chapter8-AlphaBlendBothSided.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter6\Chapter6-BlinnPhongUseBuildInFunctions.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\UnLitInput.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\DiffuseFragLevel.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter7\Chapter7-NormalMapWorldSpace.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\11\Billboard.shader" />
@@ -220,6 +221,7 @@
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\SpecularFragLevel-BlinPhong.shader" />
     <None Include="Assets\ZhuangDong\L1\HalfLambert.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\EdgeDetectedWithDepthNormal.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\LitInput.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\10\Reflection.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter8\Chapter8-AlphaBlendZWrite.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter3\Redify.shader" />
