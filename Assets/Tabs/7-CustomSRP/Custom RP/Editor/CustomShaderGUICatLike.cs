@@ -67,7 +67,8 @@ public class CustomShaderGUICatLike : ShaderGUI {
 		materials = materialEditor.targets;
 		this.properties = properties;
 
-		EditorGUILayout.Space();
+        BakedEmission();
+        EditorGUILayout.Space();
 		showPresets = EditorGUILayout.Foldout(showPresets, "Presets", true);
 		if (showPresets) {
 			OpaquePreset();
@@ -180,5 +181,19 @@ public class CustomShaderGUICatLike : ShaderGUI {
         {
             m.SetShaderPassEnabled("ShadowCaster", enabled);
         }        
+    }
+
+    void BakedEmission()
+    {
+        EditorGUI.BeginChangeCheck();
+        editor.LightmapEmissionProperty();
+        if (EditorGUI.EndChangeCheck())
+        {
+            foreach (Material m in editor.targets)
+            {
+                m.globalIlluminationFlags &=
+                    ~MaterialGlobalIlluminationFlags.EmissiveIsBlack;
+            }
+        }
     }
 }
