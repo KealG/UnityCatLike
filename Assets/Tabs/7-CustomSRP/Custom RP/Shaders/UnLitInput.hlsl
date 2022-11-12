@@ -25,4 +25,13 @@ float GetCutoff (float2 baseUV) {
 	return UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Cutoff);
 }
 
+float GetMetallic (float2 baseUV) {
+	return 0.0;
+}
+
+float GetSmoothness (float2 baseUV) {
+	return 0.0;
+}
+
+
 #endif

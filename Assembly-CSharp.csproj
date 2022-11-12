@@ -215,6 +215,7 @@
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter18\SimpleBlend.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter6\Chapter6-SpecularVertexLevel.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\10\Refraction.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\MetaPass.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\7\RampTexture.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter7\Chapter7-MaskTexture.shader" />
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\ShaderLibrary\GI.hlsl" />
