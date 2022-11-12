@@ -65,6 +65,9 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter10\ProceduralTextureGeneration.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter13\IntersectionHighlights.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter13\EdgeDetectNormalsAndDepth.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\PerObjectMaterialProperties.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraRenderer.Editor.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.cs" />
     <Compile Include="Assets\URPDemo\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Tabs\1-Basics\Mathematical Surfaces\Function Library.cs" />
     <Compile Include="Assets\Tabs\1-Basics\BuildingAGraph\GraphAni.cs" />
@@ -74,6 +77,8 @@
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\EdgeDetectedWithDepthNormal.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter15\FogWithNoise.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Helpers\SetPropertyAttribute.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraRenderer.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Lighting.cs" />
     <Compile Include="Assets\IGGWorkTest\SLGFOG\ChangFOG.cs" />
     <Compile Include="Assets\IGGWorkTest\ProcedualMesh\ProcedualMesh.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\EdgeTest.cs" />
@@ -81,8 +86,11 @@
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\BrightnessSaturationContrast.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\MotionBlurEffect.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\GaussianBlur.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipeline.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\MotionBlurWithDepthTex.cs" />
     <Compile Include="Assets\URPDemo\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\MeshBall.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Shadows.cs" />
     <Compile Include="Assets\IGGWorkTest\NewBehaviourScript.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Helpers\Rotating.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\15\FogWithNoiseTex.cs" />
@@ -93,15 +101,7 @@
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\GussBlur.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Empty.cs" />
     <Compile Include="Assets\Tabs\1-Basics\GameObjAndScripts\MovePointer.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraRenderer.Editor.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\PerObjectMaterialProperties.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipeline.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\MeshBall.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraRenderer.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Lighting.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ShadowSettings.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Shadows.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter14\Chapter14-Hatching.shader" />
@@ -216,6 +216,7 @@
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\10\Refraction.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\7\RampTexture.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter7\Chapter7-MaskTexture.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\ShaderLibrary\GI.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\SpecularFragLevel-BlinPhong.shader" />
     <None Include="Assets\ZhuangDong\L1\HalfLambert.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\EdgeDetectedWithDepthNormal.shader" />
