@@ -49,8 +49,8 @@ public class Shadows
     public Vector3 ReserveDirectionalShadows(Light light, int visibleLightIndex)
     {
         if (ShadowedDirectionalLightCount < maxShadowedDirectionalLightCount &&
-            light.shadows != LightShadows.None && light.shadowStrength > 0f &&
-            cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
+            light.shadows != LightShadows.None && light.shadowStrength > 0f )//&&
+            //cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
         {
             LightBakingOutput lightBaking = light.bakingOutput;
             if (
@@ -59,6 +59,14 @@ public class Shadows
             )
             {
                 this.useShadowMask = true;
+            }
+
+            if (!cullingResults.GetShadowCasterBounds(
+                visibleLightIndex, out Bounds b
+            ))
+            {
+                //当阴影强度大于零时，着色器将对ShadowMap进行采样
+                return new Vector3(-light.shadowStrength, 0f, 0f);
             }
 
             ShadowedDirectionalLights[ShadowedDirectionalLightCount] =
@@ -272,6 +280,7 @@ public class Shadows
 
     //----------------------------------------------------------------------------Apply Shadow Mask------------------------------------------------------------------------
     static string[] shadowMaskKeywords = {
+        "_SHADOW_MASK_ALWAYS" ,
         "_SHADOW_MASK_DISTANCE"
     };
     bool useShadowMask;
