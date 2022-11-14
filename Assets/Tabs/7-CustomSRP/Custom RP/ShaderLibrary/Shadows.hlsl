@@ -114,14 +114,15 @@ float MixBakedAndRealtimeShadows (
 	float resultShadow;
 	float baked = GetBakedShadow(global.shadowMask);
 	if (global.shadowMask.distance) 
-	{
-		resultShadow = baked;
+	{		
+		resultShadow = lerp(baked, realTimeShadow, global.strength);
+		return lerp(1.0, resultShadow, strength);
 	}	
 	else
 	{
 		resultShadow = realTimeShadow;
-	}
-	return lerp(1.0, resultShadow, strength);
+		return lerp(1.0, resultShadow, strength * global.strength);
+	}	
 }
 
 //返回阴影衰减函数
