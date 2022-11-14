@@ -99,7 +99,9 @@ public class Shadows
         }
 
         buffer.BeginSample(bufferName);
-        SetKeywords(shadowMaskKeywords, useShadowMask ? 0 : -1);
+        SetKeywords(shadowMaskKeywords, useShadowMask ?
+            QualitySettings.shadowmaskMode == ShadowmaskMode.Shadowmask ? 0 : 1 :
+            -1);
         buffer.EndSample(bufferName);
         ExecuteBuffer();
     }

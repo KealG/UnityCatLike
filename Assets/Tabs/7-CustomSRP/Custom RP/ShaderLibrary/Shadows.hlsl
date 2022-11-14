@@ -44,6 +44,7 @@ float SampleDirectionalShadowAtlas (float3 positionSTS) {
 }
 
 struct ShadowMask {
+	bool always;
 	bool distance;
 	float4 shadows;
 };
@@ -102,14 +103,15 @@ float GetCascadedShadow (
 //获取烘培ShadowMap+LP遮挡+LPPV遮挡数据
 float GetBakedShadow (ShadowMask mask) {
 	float shadow = 1.0;
-	if (mask.distance) {
+	if (mask.distance || mask.always) {
 		shadow = mask.shadows.r;
 	}
 	return shadow;
 }
 
 float GetBakedShadow (ShadowMask mask, float strength) {
-	if (mask.distance) {
+	if (mask.distance || mask.always) 
+	{
 		return lerp(1.0, GetBakedShadow(mask), strength);
 	}
 	return 1.0;
@@ -120,6 +122,11 @@ float MixBakedAndRealtimeShadows (
 ) {
 	float resultShadow;
 	float baked = GetBakedShadow(global.shadowMask);
+	if (global.shadowMask.always) {
+		realTimeShadow = lerp(1.0, realTimeShadow, global.strength);
+		resultShadow = min(baked, realTimeShadow);
+		return lerp(1.0, resultShadow, strength);
+	}
 	if (global.shadowMask.distance) 
 	{		
 		resultShadow = lerp(baked, realTimeShadow, global.strength);
@@ -158,7 +165,8 @@ ShadowData GetShadowData (Surface surfaceWS) {
 	ShadowData data;
 	data.shadowMask.distance = false;
 	data.shadowMask.shadows = 1.0;
-    data.cascadeBlend = 1.0;
+	data.shadowMask.always = false;
+    data.cascadeBlend = 1.0;	
     //对超出边界的阴影进行平滑处理
     data.strength =  FadedShadowStrength(
 		surfaceWS.depth, _ShadowDistanceFade.x, _ShadowDistanceFade.y
