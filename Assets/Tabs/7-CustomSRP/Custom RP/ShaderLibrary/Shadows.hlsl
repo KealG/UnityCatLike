@@ -75,24 +75,17 @@ float FilterDirectionalShadow (float3 positionSTS) {
 	#endif
 }
 
-//返回阴影衰减函数
-float GetDirectionalShadowAttenuation (DirectionalShadowData directional, ShadowData global, Surface surfaceWS) {
-#if !defined(_RECEIVE_SHADOWS)
-	return 1.0;
-#endif
-    if (directional.strength <= 0.0) {
-		return 1.0;
-	}
-    float3 normalBias = surfaceWS.normal * (directional.normalBias * _CascadeData[global.cascadeIndex].y);
+float GetCascadedShadow (
+	DirectionalShadowData directional, ShadowData global, Surface surfaceWS
+) {
+	float3 normalBias = surfaceWS.normal *
+		(directional.normalBias * _CascadeData[global.cascadeIndex].y);
 	float3 positionSTS = mul(
 		_DirectionalShadowMatrices[directional.tileIndex],
 		float4(surfaceWS.position + normalBias, 1.0)
 	).xyz;
-    //引入PCF采样实现软阴影
 	float shadow = FilterDirectionalShadow(positionSTS);
-    //级联之间过渡的混合
-    if (global.cascadeBlend < 1.0) 
-    {
+	if (global.cascadeBlend < 1.0) {
 		normalBias = surfaceWS.normal *
 			(directional.normalBias * _CascadeData[global.cascadeIndex + 1].y);
 		positionSTS = mul(
@@ -103,7 +96,48 @@ float GetDirectionalShadowAttenuation (DirectionalShadowData directional, Shadow
 			FilterDirectionalShadow(positionSTS), shadow, global.cascadeBlend
 		);
 	}
-	return  lerp(1.0, shadow, directional.strength);
+	return shadow;
+}
+
+//获取烘培ShadowMap+LP遮挡+LPPV遮挡数据
+float GetBakedShadow (ShadowMask mask) {
+	float shadow = 1.0;
+	if (mask.distance) {
+		shadow = mask.shadows.r;
+	}
+	return shadow;
+}
+
+float MixBakedAndRealtimeShadows (
+	ShadowData global, float realTimeShadow, float strength
+) {
+	float resultShadow;
+	float baked = GetBakedShadow(global.shadowMask);
+	if (global.shadowMask.distance) 
+	{
+		resultShadow = baked;
+	}	
+	else
+	{
+		resultShadow = realTimeShadow;
+	}
+	return lerp(1.0, resultShadow, strength);
+}
+
+//返回阴影衰减函数
+float GetDirectionalShadowAttenuation (DirectionalShadowData directional, ShadowData global, Surface surfaceWS) {
+#if !defined(_RECEIVE_SHADOWS)
+	return 1.0;
+#endif    
+    float shadow;
+	if (directional.strength <= 0.0) {
+		shadow = 1.0;
+	}
+	else {
+		shadow = GetCascadedShadow(directional, global, surfaceWS);
+		shadow = MixBakedAndRealtimeShadows(global, shadow, directional.strength);
+	}
+	return  shadow;
 }
 
 
