@@ -43,11 +43,18 @@ float SampleDirectionalShadowAtlas (float3 positionSTS) {
 	);
 }
 
+struct ShadowMask {
+	bool distance;
+	float4 shadows;
+};
+
 struct ShadowData {
 	int cascadeIndex;
     float strength;
     //用于级联之间的混合值
     float cascadeBlend;
+	//Apply Shadow mask
+	ShadowMask shadowMask;
 };
 
 float FilterDirectionalShadow (float3 positionSTS) {
@@ -107,6 +114,8 @@ float FadedShadowStrength (float distance, float scale, float fade) {
 
 ShadowData GetShadowData (Surface surfaceWS) {
 	ShadowData data;
+	data.shadowMask.distance = false;
+	data.shadowMask.shadows = 1.0;
     data.cascadeBlend = 1.0;
     //对超出边界的阴影进行平滑处理
     data.strength =  FadedShadowStrength(

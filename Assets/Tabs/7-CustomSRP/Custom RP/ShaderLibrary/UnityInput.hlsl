@@ -7,6 +7,9 @@ CBUFFER_START(UnityPerDraw)
 	float4 unity_LODFade;
 	real4 unity_WorldTransformParams;
 
+	//ShadowMask for dynamic object data
+	float4 unity_ProbesOcclusion;
+
 	//LightMap
 	float4 unity_LightmapST;
 	float4 unity_DynamicLightmapST;
