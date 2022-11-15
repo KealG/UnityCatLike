@@ -35,6 +35,7 @@ struct DirectionalShadowData {
 	float strength;
 	int tileIndex;
     float normalBias;
+	int shadowMaskChannel;
 };
 
 float SampleDirectionalShadowAtlas (float3 positionSTS) {
@@ -101,27 +102,30 @@ float GetCascadedShadow (
 }
 
 //获取烘培ShadowMap+LP遮挡+LPPV遮挡数据
-float GetBakedShadow (ShadowMask mask) {
+float GetBakedShadow (ShadowMask mask, int channel) {
 	float shadow = 1.0;
 	if (mask.distance || mask.always) {
-		shadow = mask.shadows.r;
+		if (channel >= 0) {
+			//由默认取R通道改为取C#传递过来的信号通道
+			shadow = mask.shadows[channel];
+		}		
 	}
 	return shadow;
 }
 
-float GetBakedShadow (ShadowMask mask, float strength) {
+float GetBakedShadow (ShadowMask mask, int channel, float strength) {
 	if (mask.distance || mask.always) 
 	{
-		return lerp(1.0, GetBakedShadow(mask), strength);
+		return lerp(1.0, GetBakedShadow(mask, channel), strength);
 	}
 	return 1.0;
 }
 
 float MixBakedAndRealtimeShadows (
-	ShadowData global, float realTimeShadow, float strength
+	ShadowData global, float realTimeShadow, int shadowMaskChannel, float strength
 ) {
 	float resultShadow;
-	float baked = GetBakedShadow(global.shadowMask);
+	float baked = GetBakedShadow(global.shadowMask, shadowMaskChannel);
 	if (global.shadowMask.always) {
 		realTimeShadow = lerp(1.0, realTimeShadow, global.strength);
 		resultShadow = min(baked, realTimeShadow);
@@ -146,11 +150,11 @@ float GetDirectionalShadowAttenuation (DirectionalShadowData directional, Shadow
 #endif    
     float shadow;
 	if (directional.strength * global.strength <= 0.0) {
-		shadow = GetBakedShadow(global.shadowMask,  abs(directional.strength));
+		shadow = GetBakedShadow(global.shadowMask, directional.shadowMaskChannel, abs(directional.strength));
 	}
 	else {
 		shadow = GetCascadedShadow(directional, global, surfaceWS);
-		shadow = MixBakedAndRealtimeShadows(global, shadow, directional.strength);
+		shadow = MixBakedAndRealtimeShadows(global, shadow, directional.shadowMaskChannel, directional.strength);
 	}
 	return  shadow;
 }

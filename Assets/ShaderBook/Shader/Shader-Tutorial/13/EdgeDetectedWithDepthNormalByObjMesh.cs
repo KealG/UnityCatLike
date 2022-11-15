@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Networking.Types;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class EdgeDetectedWithDepthNormalByObjMesh : PostEffectsBase
 {

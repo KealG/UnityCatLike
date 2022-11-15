@@ -46,18 +46,20 @@ public class Shadows
         buffer.Clear();
     }
 
-    public Vector3 ReserveDirectionalShadows(Light light, int visibleLightIndex)
+    public Vector4 ReserveDirectionalShadows(Light light, int visibleLightIndex)
     {
         if (ShadowedDirectionalLightCount < maxShadowedDirectionalLightCount &&
             light.shadows != LightShadows.None && light.shadowStrength > 0f )//&&
             //cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
         {
+            float maskChannel = -1;
             LightBakingOutput lightBaking = light.bakingOutput;
             if (
                 lightBaking.lightmapBakeType == LightmapBakeType.Mixed &&
                 lightBaking.mixedLightingMode == MixedLightingMode.Shadowmask
             )
             {
+                maskChannel = lightBaking.occlusionMaskChannel;
                 this.useShadowMask = true;
             }
 
@@ -66,7 +68,7 @@ public class Shadows
             ))
             {
                 //当阴影强度大于零时，着色器将对ShadowMap进行采样
-                return new Vector3(-light.shadowStrength, 0f, 0f);
+                return new Vector4(-light.shadowStrength, 0f, 0f, maskChannel);
             }
 
             ShadowedDirectionalLights[ShadowedDirectionalLightCount] =
@@ -76,12 +78,12 @@ public class Shadows
                      slopeScaleBias = light.shadowBias,
                      nearPlaneOffset = light.shadowNearPlane
                  };
-            return new Vector3(
+            return new Vector4(
                 light.shadowStrength, settings.directional.cascadeCount * ShadowedDirectionalLightCount++,
-                light.shadowNormalBias
+                light.shadowNormalBias, maskChannel
             );
         }
-        return Vector3.zero;
+        return new Vector4(0, 0, 0, -1f);
     }
 
     public void Render()
