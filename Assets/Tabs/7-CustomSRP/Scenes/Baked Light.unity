@@ -5559,7 +5559,7 @@ MonoBehaviour:
   baseColor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
   alphaCutoff: 0.5
   metallic: 1
-  smoothness: 0.458
+  smoothness: 0.665
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1170426002
 SphereCollider:
