@@ -6,6 +6,7 @@
 		_Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		[Toggle(_CLIPPING)] _Clipping ("Alpha Clipping", Float) = 0
 
+		[Toggle(_MASK_MAP)] _MaskMapToggle ("Mask Map", Float) = 0
 		[NoScaleOffset] _MaskMap("Mask (MODS)", 2D) = "white" {}
 		_Metallic ("Metallic", Range(0, 1)) = 0
 		_Occlusion ("Occlusion", Range(0, 1)) = 1
@@ -55,7 +56,10 @@
 			#pragma shader_feature _CLIPPING
 			#pragma shader_feature _PREMULTIPLY_ALPHA	
 			#pragma shader_feature _RECEIVE_SHADOWS		
+
 			#pragma shader_feature _NORMAL_MAP
+			#pragma shader_feature _MASK_MAP
+			
 			#pragma multi_compile _ _DIRECTIONAL_PCF3 _DIRECTIONAL_PCF5 _DIRECTIONAL_PCF7
 			#pragma multi_compile _ _CASCADE_BLEND_SOFT _CASCADE_BLEND_DITHER
 			//Apply Shadow Mask
