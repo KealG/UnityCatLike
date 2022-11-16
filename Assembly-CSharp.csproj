@@ -97,10 +97,10 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter5\ColorPicker.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter15\FogWithNoise.cs" />
     <Compile Include="Assets\Tabs\1-Basics\Mathematical Surfaces\Function Library.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\LodGroupDIY.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter13\MotionBlurWithDepthTexture.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\15\FogWithNoiseTex.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ShadowSettings.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\LodGroupDIY.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\IGGWorkTest\SimpleGuideFog.shader" />
