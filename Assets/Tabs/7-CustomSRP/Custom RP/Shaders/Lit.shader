@@ -23,6 +23,8 @@
 		[NoScaleOffset] _EmissionMap("Emission", 2D) = "white" {}
 		[HDR] _EmissionColor("Emission", Color) = (0.0, 0.0, 0.0, 0.0)
 		_DetailMap("Details", 2D) = "linearGrey" {}
+		_DetailAlbedo("Detail Albedo", Range(0, 1)) = 1
+		_DetailSmoothness("Detail Smoothness", Range(0, 1)) = 1
 		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
 		[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
 		

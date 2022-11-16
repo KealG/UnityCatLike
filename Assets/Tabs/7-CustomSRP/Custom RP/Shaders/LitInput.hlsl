@@ -5,6 +5,7 @@ TEXTURE2D(_BaseMap);
 TEXTURE2D(_EmissionMap);
 TEXTURE2D(_MaskMap);
 TEXTURE2D(_DetailMap);
+
 SAMPLER(sampler_DetailMap);
 
 SAMPLER(sampler_BaseMap);
@@ -21,6 +22,8 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 	UNITY_DEFINE_INSTANCED_PROP(float, _Smoothness)
 	UNITY_DEFINE_INSTANCED_PROP(float, _Fresnel)
 	UNITY_DEFINE_INSTANCED_PROP(float4, _DetailMap_ST)
+	UNITY_DEFINE_INSTANCED_PROP(float, _DetailAlbedo)
+	UNITY_DEFINE_INSTANCED_PROP(float, _DetailSmoothness)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 float4 GetMask (float2 baseUV) {
@@ -39,15 +42,19 @@ float2 TransformDetailUV (float2 detailUV) {
 
 float4 GetDetail (float2 detailUV) {
 	float4 map = SAMPLE_TEXTURE2D(_DetailMap, sampler_DetailMap, detailUV);
-	return map;
+	return map * 2.0 - 1.0;
 }
 
 float4 GetBase (float2 baseUV, float2 detailUV = 0.0) {
 	float4 map = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, baseUV);
-	float4 color = INPUT_PROP(_BaseMap_ST);
+	float4 color = INPUT_PROP(_BaseColor);
 
-	float4 detail = GetDetail(detailUV);
-	map += detail;
+	float4 detail = GetDetail(detailUV).r * INPUT_PROP(_DetailAlbedo);
+	float mask = GetMask(baseUV).b;
+	//map += detail;
+	//sqrt(map.rgb) Transform LineSpace to Gamma Space
+	map.rgb = lerp(sqrt(map.rgb), detail < 0.0 ? 0.0 : 1.0, abs(detail) * mask);
+	map.rgb *= map.rgb ;
 	return map * color;
 }
 
@@ -61,9 +68,13 @@ float GetMetallic (float2 baseUV) {
 	return metallic;
 }
 
-float GetSmoothness (float2 baseUV) {
+float GetSmoothness (float2 baseUV, float2 detailUV = 0.0) {
 	float smoothness = INPUT_PROP(_Smoothness);
 	smoothness *= GetMask(baseUV).a;
+
+	float detail = GetDetail(detailUV).b * INPUT_PROP(_DetailSmoothness);
+	float mask = GetMask(baseUV).b;
+	smoothness = lerp(smoothness, detail < 0.0 ? 0.0 : 1.0, abs(detail) * mask);
 	return smoothness;
 }
 

@@ -58,7 +58,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	ClipLOD(input.positionCS.xy, unity_LODFade.x);
 	// float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.baseUV);
 	// float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
-	float4 base = GetBase(input.baseUV);
+	float4 base = GetBase(input.baseUV, input.detailUV);
 	#if defined(_CLIPPING)
 		clip(base.a - GetCutoff(input.baseUV));
 	#endif
@@ -72,7 +72,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	surface.alpha = base.a;
 	surface.metallic = GetMetallic(input.baseUV);
 	surface.occlusion = GetOcclusion(input.baseUV);
-	surface.smoothness = GetSmoothness(input.baseUV);
+	surface.smoothness = GetSmoothness(input.baseUV, input.detailUV);
 	surface.fresnelStrength = GetFresnel(input.baseUV);
 	surface.dither = InterleavedGradientNoise(input.positionCS.xy, 0);
 	
