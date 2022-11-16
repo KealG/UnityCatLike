@@ -14,7 +14,7 @@ struct Surface {
 	float depth;
 	float fresnelStrength;
 	float dither;
-
+	float occlusion;
 };
 
 #endif

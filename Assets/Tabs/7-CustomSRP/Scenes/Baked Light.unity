@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: a7ac15183a3884248b57ab135df7a487, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 87e37f77fc21b4c4e92d8de4448e0a3f, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: e837bcf93a41fbd4baee467156cf4507, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -3318,7 +3318,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 8.2116995e+27, z: 4.5904e-41, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -5794,7 +5794,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194507880}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 0.61, z: -4}
+  m_LocalPosition: {x: -6, y: 0.965, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

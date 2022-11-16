@@ -23,7 +23,7 @@
 struct Attributes {
 	float3 positionOS : POSITION;
 	float3 normalOS : NORMAL;
-	float2 baseUV : TEXCOORD0;
+	float2 baseUV : TEXCOORD0;	
 	GI_ATTRIBUTE_DATA
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
@@ -33,6 +33,7 @@ struct Varyings {
 	float3 positionWS : VAR_POSITION;
 	float3 normalWS : VAR_NORMAL;
 	float2 baseUV : VAR_BASE_UV;
+	float2 detailUV : VAR_DETAIL_UV;
 	GI_ATTRIBUTE_DATA
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
@@ -45,9 +46,10 @@ Varyings LitPassVertex (Attributes input) {
 	output.positionWS = TransformObjectToWorld(input.positionOS);
 	output.positionCS = TransformWorldToHClip(output.positionWS);
 	output.normalWS = TransformObjectToWorldNormal(input.normalOS);
-
+	
 	// float4 baseST = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseMap_ST);
 	output.baseUV = TransformBaseUV(input.baseUV);
+	output.detailUV = TransformDetailUV(input.baseUV);
 	return output;
 }
 
@@ -69,6 +71,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	surface.color = base.rgb;
 	surface.alpha = base.a;
 	surface.metallic = GetMetallic(input.baseUV);
+	surface.occlusion = GetOcclusion(input.baseUV);
 	surface.smoothness = GetSmoothness(input.baseUV);
 	surface.fresnelStrength = GetFresnel(input.baseUV);
 	surface.dither = InterleavedGradientNoise(input.positionCS.xy, 0);
