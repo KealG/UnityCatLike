@@ -12,7 +12,7 @@ struct Surface {
 	float3 position;
 	//ViewSpace depth
 	float depth;
-	
+	float fresnelStrength;
 	float dither;
 
 };

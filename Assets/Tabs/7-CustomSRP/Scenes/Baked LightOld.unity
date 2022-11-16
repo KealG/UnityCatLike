@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 79ce73a6483c2dd4d9fdf0f74d87aaf6, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: a7ac15183a3884248b57ab135df7a487, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: e837bcf93a41fbd4baee467156cf4507, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -3318,7 +3318,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 1.17522325e-33, z: 4.5904e-41, w: 0}
+  m_BoundingSphereOverride: {x: 2.4405384e-30, y: 2.2e-44, z: -2.4405384e-30, w: 4.5e-44}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -5556,10 +5556,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b34fac330b345eea0c6df7126deddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
   alphaCutoff: 0.5
-  metallic: 0.819
-  smoothness: 0.706
+  metallic: 1
+  smoothness: 0.687
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1170426002
 SphereCollider:
