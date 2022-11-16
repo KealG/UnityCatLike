@@ -9,7 +9,8 @@ CBUFFER_START(UnityPerDraw)
 
 	//ShadowMask for dynamic object data
 	float4 unity_ProbesOcclusion;
-
+	float4 unity_SpecCube0_HDR;
+	
 	//LightMap
 	float4 unity_LightmapST;
 	float4 unity_DynamicLightmapST;
