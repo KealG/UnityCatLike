@@ -67,9 +67,10 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	ClipLOD(input.positionCS.xy, unity_LODFade.x);
 	// float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.baseUV);
 	// float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
-	float4 base = GetBase(input.baseUV, input.detailUV);
+	InputConfig config = GetInputConfig(input.baseUV, input.detailUV);
+	float4 base = GetBase(config);
 	#if defined(_CLIPPING)
-		clip(base.a - GetCutoff(input.baseUV));
+		clip(base.a - GetCutoff(config));
 	#endif
 
 	Surface surface;
@@ -77,7 +78,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	// surface.normal = normalize(input.normalWS);
 #if defined(_NORMAL_MAP)
 	surface.normal = NormalTangentToWorld(
-		GetNormalTS(input.baseUV, input.detailUV),
+		GetNormalTS(config),
 		input.normalWS, input.tangentWS
 	);
 	surface.interpolatedNormal = input.normalWS;
@@ -89,10 +90,10 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	surface.depth = -TransformWorldToView(input.positionWS).z;
 	surface.color = base.rgb;
 	surface.alpha = base.a;
-	surface.metallic = GetMetallic(input.baseUV);
-	surface.occlusion = GetOcclusion(input.baseUV);
-	surface.smoothness = GetSmoothness(input.baseUV, input.detailUV);
-	surface.fresnelStrength = GetFresnel(input.baseUV);
+	surface.metallic = GetMetallic(config);
+	surface.occlusion = GetOcclusion(config);
+	surface.smoothness = GetSmoothness(config);
+	surface.fresnelStrength = GetFresnel(config);
 	surface.dither = InterleavedGradientNoise(input.positionCS.xy, 0);
 	
 	#if defined(_PREMULTIPLY_ALPHA)
@@ -102,7 +103,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	#endif
 	GI gi = GetGI(GI_FRAGMENT_DATA(input), surface, brdf);
 	float3 color = GetLighting(surface, brdf, gi);
-	color += GetEmission(input.baseUV);
+	color += GetEmission(config);
 	return float4(color, surface.alpha);
 }
 
