@@ -58,7 +58,10 @@ Varyings LitPassVertex (Attributes input) {
 
 	// float4 baseST = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseMap_ST);
 	output.baseUV = TransformBaseUV(input.baseUV);
+#if defined(_DETAIL_MAP)
 	output.detailUV = TransformDetailUV(input.baseUV);
+#endif
+
 	return output;
 }
 
@@ -71,6 +74,12 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 #if defined(_MASK_MAP)
 	config.useMask = true;
 #endif
+
+#if defined(_DETAIL_MAP)
+	config.detailUV = input.detailUV;
+	config.useDetail = true;
+#endif
+
 	float4 base = GetBase(config);
 #if defined(_CLIPPING)
 	clip(base.a - GetCutoff(config));

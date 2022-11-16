@@ -23,6 +23,7 @@
 
 		[NoScaleOffset] _EmissionMap("Emission", 2D) = "white" {}
 		[HDR] _EmissionColor("Emission", Color) = (0.0, 0.0, 0.0, 0.0)
+		[Toggle(_DETAIL_MAP)] _DetailMapToggle ("Detail Maps", Float) = 0
 		_DetailMap("Details", 2D) = "linearGrey" {}
 		[NoScaleOffset] _DetailNormalMap("Detail Normals", 2D) = "bump" {}
 		_DetailAlbedo("Detail Albedo", Range(0, 1)) = 1
@@ -59,7 +60,8 @@
 
 			#pragma shader_feature _NORMAL_MAP
 			#pragma shader_feature _MASK_MAP
-			
+			#pragma shader_feature _DETAIL_MAP
+
 			#pragma multi_compile _ _DIRECTIONAL_PCF3 _DIRECTIONAL_PCF5 _DIRECTIONAL_PCF7
 			#pragma multi_compile _ _CASCADE_BLEND_SOFT _CASCADE_BLEND_DITHER
 			//Apply Shadow Mask
