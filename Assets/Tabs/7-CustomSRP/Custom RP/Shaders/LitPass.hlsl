@@ -33,7 +33,9 @@ struct Varyings {
 	float4 positionCS : SV_POSITION;
 	float3 positionWS : VAR_POSITION;
 	float3 normalWS : VAR_NORMAL;
+#if defined(_NORMAL_MAP)
 	float4 tangentWS : VAR_TANGENT;
+#endif
 	float2 baseUV : VAR_BASE_UV;
 	float2 detailUV : VAR_DETAIL_UV;
 	GI_ATTRIBUTE_DATA
@@ -48,7 +50,11 @@ Varyings LitPassVertex (Attributes input) {
 	output.positionWS = TransformObjectToWorld(input.positionOS);
 	output.positionCS = TransformWorldToHClip(output.positionWS);
 	output.normalWS = TransformObjectToWorldNormal(input.normalOS);
-	output.tangentWS = float4(TransformObjectToWorldDir(input.tangentOS.xyz), input.tangentOS.w);
+#if defined(_NORMAL_MAP)
+	output.tangentWS = float4(
+		TransformObjectToWorldDir(input.tangentOS.xyz), input.tangentOS.w
+	);
+#endif
 
 	// float4 baseST = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseMap_ST);
 	output.baseUV = TransformBaseUV(input.baseUV);
@@ -69,8 +75,16 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	Surface surface;
 	surface.position = input.positionWS;
 	// surface.normal = normalize(input.normalWS);
-	surface.normal = NormalTangentToWorld(GetNormalTS(input.baseUV, input.detailUV), input.normalWS, input.tangentWS);
+#if defined(_NORMAL_MAP)
+	surface.normal = NormalTangentToWorld(
+		GetNormalTS(input.baseUV, input.detailUV),
+		input.normalWS, input.tangentWS
+	);
 	surface.interpolatedNormal = input.normalWS;
+#else
+	surface.normal = normalize(input.normalWS);
+	surface.interpolatedNormal = surface.normal;
+#endif
 	surface.viewDirection = normalize(_WorldSpaceCameraPos - input.positionWS);
 	surface.depth = -TransformWorldToView(input.positionWS).z;
 	surface.color = base.rgb;

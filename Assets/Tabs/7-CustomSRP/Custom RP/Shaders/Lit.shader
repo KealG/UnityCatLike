@@ -28,6 +28,7 @@
 		_DetailSmoothness("Detail Smoothness", Range(0, 1)) = 1
 		_DetailNormalScale("Detail Normal Scale", Range(0, 1)) = 1
 
+		[Toggle(_NORMAL_MAP)] _NormalMapToggle ("Normal Map", Float) = 0
 		[NoScaleOffset] _NormalMap("Normals", 2D) = "bump" {}
 		_NormalScale("Normal Scale", Range(0, 1)) = 1
 		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
@@ -54,12 +55,13 @@
 			#pragma shader_feature _CLIPPING
 			#pragma shader_feature _PREMULTIPLY_ALPHA	
 			#pragma shader_feature _RECEIVE_SHADOWS		
+			#pragma shader_feature _NORMAL_MAP
 			#pragma multi_compile _ _DIRECTIONAL_PCF3 _DIRECTIONAL_PCF5 _DIRECTIONAL_PCF7
 			#pragma multi_compile _ _CASCADE_BLEND_SOFT _CASCADE_BLEND_DITHER
 			//Apply Shadow Mask
 			#pragma multi_compile _ _SHADOW_MASK_ALWAYS _SHADOW_MASK_DISTANCE
 			#pragma multi_compile _ LIGHTMAP_ON
-			#pragma multi_compile _ LOD_FADE_CROSSFADE
+			#pragma multi_compile _ LOD_FADE_CROSSFADE			
 			#pragma multi_compile_instancing			
 			#pragma vertex LitPassVertex
 			#pragma fragment LitPassFragment
