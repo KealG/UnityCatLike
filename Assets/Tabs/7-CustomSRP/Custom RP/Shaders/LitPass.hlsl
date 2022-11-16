@@ -69,7 +69,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET {
 	Surface surface;
 	surface.position = input.positionWS;
 	// surface.normal = normalize(input.normalWS);
-	surface.normal = NormalTangentToWorld(GetNormalTS(input.baseUV), input.normalWS, input.tangentWS);
+	surface.normal = NormalTangentToWorld(GetNormalTS(input.baseUV, input.detailUV), input.normalWS, input.tangentWS);
 	surface.interpolatedNormal = input.normalWS;
 	surface.viewDirection = normalize(_WorldSpaceCameraPos - input.positionWS);
 	surface.depth = -TransformWorldToView(input.positionWS).z;
