@@ -6,7 +6,9 @@ CBUFFER_START(UnityPerDraw)
 	float4x4 unity_WorldToObject;
 	float4 unity_LODFade;
 	real4 unity_WorldTransformParams;
-
+	//Spot And Point Light
+	real4 unity_LightData;
+	real4 unity_LightIndices[2];
 	//ShadowMask for dynamic object data
 	float4 unity_ProbesOcclusion;
 	float4 unity_SpecCube0_HDR;
@@ -28,7 +30,7 @@ CBUFFER_START(UnityPerDraw)
 	float4 unity_ProbeVolumeParams;
 	float4x4 unity_ProbeVolumeWorldToObject;
 	float4 unity_ProbeVolumeSizeInv;
-	float4 unity_ProbeVolumeMin;
+	float4 unity_ProbeVolumeMin;	
 CBUFFER_END
 
 float4x4 unity_MatrixVP;

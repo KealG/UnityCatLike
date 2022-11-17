@@ -23,7 +23,7 @@ public partial class CameraRenderer {
 
 	public void Render (
 		ScriptableRenderContext context, Camera camera,
-		bool useDynamicBatching, bool useGPUInstancing,
+		bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject,
         ShadowSettings shadowSettings
     ) {
 		this.context = context;
@@ -36,10 +36,10 @@ public partial class CameraRenderer {
 		}
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
-        lighting.Setup(context, cullingResults, shadowSettings);
+        lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject);
         buffer.EndSample(SampleName);
         Setup();
-        DrawVisibleGeometry(useDynamicBatching, useGPUInstancing);
+        DrawVisibleGeometry(useDynamicBatching, useGPUInstancing, useLightsPerObject);
 		DrawUnsupportedShaders();
 		DrawGizmos();
         lighting.Cleanup();
@@ -79,8 +79,11 @@ public partial class CameraRenderer {
 		buffer.Clear();
 	}
 
-	void DrawVisibleGeometry (bool useDynamicBatching, bool useGPUInstancing) {
-		var sortingSettings = new SortingSettings(camera) {
+	void DrawVisibleGeometry (bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject) {
+        PerObjectData lightsPerObjectFlags = useLightsPerObject ?
+            PerObjectData.LightData | PerObjectData.LightIndices :
+            PerObjectData.None;
+        var sortingSettings = new SortingSettings(camera) {
 			criteria = SortingCriteria.CommonOpaque
 		};
 		var drawingSettings = new DrawingSettings(
@@ -90,7 +93,8 @@ public partial class CameraRenderer {
 			enableInstancing = useGPUInstancing,
 			perObjectData = PerObjectData.ReflectionProbes | PerObjectData.Lightmaps | PerObjectData.LightProbe |
                 PerObjectData.LightProbeProxyVolume | PerObjectData.ShadowMask | PerObjectData.OcclusionProbe |
-                PerObjectData.OcclusionProbeProxyVolume                
+                PerObjectData.OcclusionProbeProxyVolume |
+                lightsPerObjectFlags
         };
 		drawingSettings.SetShaderPassName(1, litShaderTagId);
 
