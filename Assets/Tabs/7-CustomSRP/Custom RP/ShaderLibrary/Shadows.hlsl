@@ -14,10 +14,23 @@
 	#define DIRECTIONAL_FILTER_SETUP SampleShadow_ComputeSamples_Tent_7x7
 #endif
 
+#if defined(_OTHER_PCF3)
+	#define OTHER_FILTER_SAMPLES 4
+	#define OTHER_FILTER_SETUP SampleShadow_ComputeSamples_Tent_3x3
+#elif defined(_OTHER_PCF5)
+	#define OTHER_FILTER_SAMPLES 9
+	#define OTHER_FILTER_SETUP SampleShadow_ComputeSamples_Tent_5x5
+#elif defined(_OTHER_PCF7)
+	#define OTHER_FILTER_SAMPLES 16
+	#define OTHER_FILTER_SETUP SampleShadow_ComputeSamples_Tent_7x7
+#endif
+
 #define MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT 4
+#define MAX_SHADOWED_OTHER_LIGHT_COUNT 16
 #define MAX_CASCADE_COUNT 4
 
 TEXTURE2D_SHADOW(_DirectionalShadowAtlas);
+TEXTURE2D_SHADOW(_OtherShadowAtlas);
 #define SHADOW_SAMPLER sampler_linear_clamp_compare
 SAMPLER_CMP(SHADOW_SAMPLER);
 
@@ -25,6 +38,7 @@ CBUFFER_START(_CustomShadows)
     int _CascadeCount;
 	float4 _CascadeCullingSpheres[MAX_CASCADE_COUNT];
 	float4x4 _DirectionalShadowMatrices[MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT * MAX_CASCADE_COUNT];
+	float4x4 _OtherShadowMatrices[MAX_SHADOWED_OTHER_LIGHT_COUNT];
     float4 _ShadowAtlasSize;
     //阴影采样的最大距离InViewSpace
     float4 _ShadowDistanceFade;
@@ -43,12 +57,6 @@ struct OtherShadowData {
 	int shadowMaskChannel;
 };
 
-float SampleDirectionalShadowAtlas (float3 positionSTS) {
-	return SAMPLE_TEXTURE2D_SHADOW(
-		_DirectionalShadowAtlas, SHADOW_SAMPLER, positionSTS
-	);
-}
-
 struct ShadowMask {
 	bool always;
 	bool distance;
@@ -63,6 +71,12 @@ struct ShadowData {
 	//Apply Shadow mask
 	ShadowMask shadowMask;
 };
+
+float SampleDirectionalShadowAtlas (float3 positionSTS) {
+	return SAMPLE_TEXTURE2D_SHADOW(
+		_DirectionalShadowAtlas, SHADOW_SAMPLER, positionSTS
+	);
+}
 
 float FilterDirectionalShadow (float3 positionSTS) {
 	#if defined(DIRECTIONAL_FILTER_SETUP)
@@ -81,6 +95,8 @@ float FilterDirectionalShadow (float3 positionSTS) {
 		return SampleDirectionalShadowAtlas(positionSTS);
 	#endif
 }
+
+
 
 float GetCascadedShadow (
 	DirectionalShadowData directional, ShadowData global, Surface surfaceWS
@@ -164,19 +180,28 @@ float GetDirectionalShadowAttenuation (DirectionalShadowData directional, Shadow
 	return  shadow;
 }
 
+float GetOtherShadow (
+	OtherShadowData other, ShadowData global, Surface surfaceWS
+) {
+	return 1.0;
+}
+
 float GetOtherShadowAttenuation (OtherShadowData other, ShadowData global, Surface surfaceWS) {
 	#if !defined(_RECEIVE_SHADOWS)
 		return 1.0;
 	#endif
 	
-	float shadow;
-	if (other.strength > 0.0) {
+	float shadow = 0;
+	if (other.strength * global.strength <= 0.0) {
 		shadow = GetBakedShadow(
-			global.shadowMask, other.shadowMaskChannel, other.strength
+			global.shadowMask, other.shadowMaskChannel,  abs(other.strength)
 		);
 	}
 	else {
-		shadow = 1.0;
+		GetOtherShadow(other, global, surfaceWS);
+		shadow = MixBakedAndRealtimeShadows(
+			global, shadow, other.shadowMaskChannel, other.strength
+		);
 	}
 	return shadow;
 }
@@ -219,7 +244,7 @@ ShadowData GetShadowData (Surface surfaceWS) {
 		}
 	}
 
-    if (i == _CascadeCount) {
+    if (i == _CascadeCount  && _CascadeCount > 0) {
 		data.strength = 0.0;
 	}
 #if defined(_CASCADE_BLEND_DITHER)
