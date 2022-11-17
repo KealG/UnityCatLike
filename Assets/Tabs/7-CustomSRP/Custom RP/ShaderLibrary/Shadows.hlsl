@@ -54,6 +54,7 @@ struct DirectionalShadowData {
 
 struct OtherShadowData {
 	float strength;
+	int tileIndex;
 	int shadowMaskChannel;
 };
 
@@ -96,7 +97,29 @@ float FilterDirectionalShadow (float3 positionSTS) {
 	#endif
 }
 
+float SampleOtherShadowAtlas (float3 positionSTS) {
+	return SAMPLE_TEXTURE2D_SHADOW(
+		_OtherShadowAtlas, SHADOW_SAMPLER, positionSTS
+	);
+}
 
+float FilterOtherShadow (float3 positionSTS) {
+	#if defined(OTHER_FILTER_SETUP)
+		real weights[OTHER_FILTER_SAMPLES];
+		real2 positions[OTHER_FILTER_SAMPLES];
+		float4 size = _ShadowAtlasSize.wwzz;
+		OTHER_FILTER_SETUP(size, positionSTS.xy, weights, positions);
+		float shadow = 0;
+		for (int i = 0; i < OTHER_FILTER_SAMPLES; i++) {
+			shadow += weights[i] * SampleOtherShadowAtlas(
+				float3(positions[i].xy, positionSTS.z)
+			);
+		}
+		return shadow;
+	#else
+		return SampleOtherShadowAtlas(positionSTS);
+	#endif
+}
 
 float GetCascadedShadow (
 	DirectionalShadowData directional, ShadowData global, Surface surfaceWS
@@ -183,7 +206,12 @@ float GetDirectionalShadowAttenuation (DirectionalShadowData directional, Shadow
 float GetOtherShadow (
 	OtherShadowData other, ShadowData global, Surface surfaceWS
 ) {
-	return 1.0;
+	float3 normalBias = surfaceWS.interpolatedNormal * 0.0;
+	float4 positionSTS = mul(
+		_OtherShadowMatrices[other.tileIndex],
+		float4(surfaceWS.position + normalBias, 1.0)
+	);
+	return FilterOtherShadow(positionSTS.xyz / positionSTS.w);
 }
 
 float GetOtherShadowAttenuation (OtherShadowData other, ShadowData global, Surface surfaceWS) {
