@@ -15,18 +15,18 @@ MonoBehaviour:
   useDynamicBatching: 1
   useGPUInstancing: 1
   useSRPBatcher: 1
-  useLightsPerObject: 1
+  useLightsPerObject: 0
   shadows:
-    maxDistance: 12.6
-    distanceFade: 0.087
+    maxDistance: 100
+    distanceFade: 0.1
     directional:
       atlasSize: 1024
+      filter: 0
       cascadeCount: 4
       cascadeRatio1: 0.1
       cascadeRatio2: 0.25
       cascadeRatio3: 0.5
-      cascadeFade: 0.105
-      filter: 1
+      cascadeFade: 0.1
       cascadeBlend: 0
     other:
       atlasSize: 1024
