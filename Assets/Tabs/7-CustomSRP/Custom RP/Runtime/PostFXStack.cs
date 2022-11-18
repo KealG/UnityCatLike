@@ -39,7 +39,8 @@ public partial class PostFXStack
     fxSource2Id = Shader.PropertyToID("_PostFXSource2"),
     bloomBucibicUpsamplingId = Shader.PropertyToID("_BloomBicubicUpsampling"),
     bloomPrefilterId = Shader.PropertyToID("_BloomPrefilter"),
-    bloomThresholdId = Shader.PropertyToID("_BloomThreshold");
+    bloomThresholdId = Shader.PropertyToID("_BloomThreshold"),
+    bloomIntensityId = Shader.PropertyToID("_BloomIntensity");
 
     public PostFXStack()
     {
@@ -111,6 +112,7 @@ public partial class PostFXStack
         toId -= 5;
 
         buffer.SetGlobalFloat(bloomBucibicUpsamplingId, bloom.bicubicUpsampling ? 1f : 0f);
+        buffer.SetGlobalFloat(bloomIntensityId, 1f);
         if (i > 1)
         {
             for (i -= 1; i > 0; i--)
@@ -127,7 +129,7 @@ public partial class PostFXStack
         {
             buffer.ReleaseTemporaryRT(bloomPyramidId);
         }
-
+        buffer.SetGlobalFloat(bloomIntensityId, bloom.intensity);
         buffer.SetGlobalTexture(fxSource2Id, sourceId);
         Draw(fromId, BuiltinRenderTextureType.CameraTarget, Pass.BloomCombine);
         buffer.ReleaseTemporaryRT(fromId);

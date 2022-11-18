@@ -90,7 +90,7 @@ float4 BloomVerticalPassFragment (Varyings input) : SV_TARGET {
 }
 
 bool _BloomBicubicUpsampling;
-
+float _BloomIntensity;
 float4 BloomCombinePassFragment (Varyings input) : SV_TARGET {
 	float3 lowRes;
 	if (_BloomBicubicUpsampling) {
@@ -100,7 +100,7 @@ float4 BloomCombinePassFragment (Varyings input) : SV_TARGET {
 		lowRes = GetSource(input.screenUV).rgb;
 	}
 	float3 highRes = GetSource2(input.screenUV).rgb;
-	return float4(lowRes + highRes, 1.0);
+	return float4(lowRes * _BloomIntensity + highRes , 1.0);
 }
 
 float4 _BloomThreshold;
