@@ -8,11 +8,15 @@ public partial class CustomRenderPipeline : RenderPipeline {
 	bool useDynamicBatching, useGPUInstancing, useLightsPerObject;
 
     ShadowSettings shadowSettings;
+
+    PostFXSettings postFXSettings;
     public CustomRenderPipeline (
 		bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, bool useLightsPerObject,
-        ShadowSettings shadowSettings
+        ShadowSettings shadowSettings,
+        PostFXSettings postFXSettings
     ) {
-		this.useDynamicBatching = useDynamicBatching;
+        this.postFXSettings = postFXSettings;
+        this.useDynamicBatching = useDynamicBatching;
 		this.useGPUInstancing = useGPUInstancing;
 		GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
 		GraphicsSettings.lightsUseLinearIntensity = true;
@@ -27,7 +31,7 @@ public partial class CustomRenderPipeline : RenderPipeline {
 		foreach (Camera camera in cameras) {
 			renderer.Render(
 				context, camera, useDynamicBatching, useLightsPerObject, useGPUInstancing,
-                shadowSettings
+                shadowSettings, postFXSettings
             );
 		}
 	}

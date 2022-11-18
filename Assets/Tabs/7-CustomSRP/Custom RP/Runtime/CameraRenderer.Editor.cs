@@ -4,10 +4,13 @@ using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 
 partial class CameraRenderer {
+	
 
-	partial void DrawGizmos ();
+    partial void DrawGizmosBeforeFX();
 
-	partial void DrawUnsupportedShaders ();
+    partial void DrawGizmosAfterFX();
+
+    partial void DrawUnsupportedShaders ();
 
 	partial void PrepareForSceneWindow ();
 
@@ -28,14 +31,23 @@ partial class CameraRenderer {
 
 	string SampleName { get; set; }
 
-	partial void DrawGizmos () {
-		if (Handles.ShouldRenderGizmos()) {
-			context.DrawGizmos(camera, GizmoSubset.PreImageEffects);
-			context.DrawGizmos(camera, GizmoSubset.PostImageEffects);
-		}
-	}
+    partial void DrawGizmosBeforeFX()
+    {
+        if (Handles.ShouldRenderGizmos())
+        {
+            context.DrawGizmos(camera, GizmoSubset.PreImageEffects);            
+        }
+    }
 
-	partial void DrawUnsupportedShaders () {
+    partial void DrawGizmosAfterFX()
+    {
+        if (Handles.ShouldRenderGizmos())
+        {
+            context.DrawGizmos(camera, GizmoSubset.PostImageEffects);
+        }
+    }
+
+    partial void DrawUnsupportedShaders () {
 		if (errorMaterial == null) {
 			errorMaterial =
 				new Material(Shader.Find("Hidden/InternalErrorShader"));

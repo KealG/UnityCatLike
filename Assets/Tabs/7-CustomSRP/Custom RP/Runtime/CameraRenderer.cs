@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 public partial class CameraRenderer {
@@ -21,10 +22,11 @@ public partial class CameraRenderer {
 
 	Lighting lighting = new Lighting();
 
-	public void Render (
+    PostFXStack postFXStack = new PostFXStack();
+    public void Render (
 		ScriptableRenderContext context, Camera camera,
 		bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject,
-        ShadowSettings shadowSettings
+        ShadowSettings shadowSettings, PostFXSettings postFXSettings
     ) {
 		this.context = context;
 		this.camera = camera;
@@ -34,19 +36,30 @@ public partial class CameraRenderer {
 		if (!Cull(shadowSettings.maxDistance)) {
 			return;
 		}
+		//开始统计本次绘制范围
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
         lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject);
+        postFXStack.Setup(context, camera, postFXSettings);
         buffer.EndSample(SampleName);
+		//清理Camera绘制目标
         Setup();
         DrawVisibleGeometry(useDynamicBatching, useGPUInstancing, useLightsPerObject);
-		DrawUnsupportedShaders();
-		DrawGizmos();
-        lighting.Cleanup();
+		DrawUnsupportedShaders();		
+		DrawGizmosBeforeFX();
+        if (postFXStack.IsActive)
+        {
+            postFXStack.Render(frameBufferId);
+        }        
+		DrawGizmosAfterFX();
+        Cleanup();
+		//提交本次绘制
         Submit();
 	}
 
-	bool Cull (float maxShadowDistance) {
+    
+
+    bool Cull (float maxShadowDistance) {
 		if (camera.TryGetCullingParameters(out ScriptableCullingParameters p)) {
             p.shadowDistance = Mathf.Min(maxShadowDistance, camera.farClipPlane);
             cullingResults = context.Cull(ref p);
@@ -55,10 +68,28 @@ public partial class CameraRenderer {
 		return false;
 	}
 
-	void Setup () {
+    static int frameBufferId = Shader.PropertyToID("_CameraFrameBuffer");
+    void Setup () {
 		context.SetupCameraProperties(camera);
 		CameraClearFlags flags = camera.clearFlags;
-		buffer.ClearRenderTarget(
+
+        if (postFXStack.IsActive)
+        {
+            if (flags > CameraClearFlags.Color)
+            {
+                flags = CameraClearFlags.Color;
+            }
+            buffer.GetTemporaryRT(
+                frameBufferId, camera.pixelWidth, camera.pixelHeight,
+                32, FilterMode.Bilinear, RenderTextureFormat.Default
+            );
+            buffer.SetRenderTarget(
+                frameBufferId,
+                RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store
+            );
+        }
+
+        buffer.ClearRenderTarget(
 			flags <= CameraClearFlags.Depth,
 			flags == CameraClearFlags.Color,
 			flags == CameraClearFlags.Color ?
@@ -114,4 +145,13 @@ public partial class CameraRenderer {
 			cullingResults, ref drawingSettings, ref filteringSettings
 		);
 	}
+
+    void Cleanup()
+    {
+        lighting.Cleanup();
+        if (postFXStack.IsActive)
+        {
+            buffer.ReleaseTemporaryRT(frameBufferId);
+        }
+    }
 }
