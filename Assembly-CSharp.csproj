@@ -65,6 +65,7 @@
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Lighting.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter10\ProceduralTextureGeneration.cs" />
     <Compile Include="Assets\IGGWorkTest\ProcedualMesh\ProcedualMesh.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\PerObjectMaterialProperties.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\BrightnessSaturationContrast.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\MeshBall.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\EdgeDetectedWithDepthNormalByObjMesh.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Assets\ShaderBook\Shader\Empty.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\BloomTest.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraRenderer.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFxStack.Editor.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\OnCameraRenderProcess.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\EdgeDetectedWithDepthNormal.cs" />
     <Compile Include="Assets\Tabs\1-Basics\Mathematical Surfaces\Function Library.cs" />
@@ -86,6 +88,8 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Helpers\SetPropertyAttribute.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\EdgeDetection.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFXSettings.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFXStack.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter13\EdgeDetectNormalsAndDepth.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\GaussianBlur.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\MotionBlur.cs" />
@@ -101,10 +105,6 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter15\BurnHelper.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Helpers\Rotating.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\FogWithDepthTex.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\PerObjectMaterialProperties.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFXSettings.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFXStack.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFxStack.Editor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\EdgeTest.shader" />

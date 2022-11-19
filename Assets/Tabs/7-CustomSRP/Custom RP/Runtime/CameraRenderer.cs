@@ -23,9 +23,11 @@ public partial class CameraRenderer {
 	Lighting lighting = new Lighting();
 
     PostFXStack postFXStack = new PostFXStack();
+
+    bool useHDR;
     public void Render (
-		ScriptableRenderContext context, Camera camera,
-		bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject,
+		ScriptableRenderContext context, Camera camera, bool allowHDR,
+        bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject,
         ShadowSettings shadowSettings, PostFXSettings postFXSettings
     ) {
 		this.context = context;
@@ -36,11 +38,13 @@ public partial class CameraRenderer {
 		if (!Cull(shadowSettings.maxDistance)) {
 			return;
 		}
-		//开始统计本次绘制范围
+
+        useHDR = allowHDR && camera.allowHDR;
+        //开始统计本次绘制范围
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
         lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject);
-        postFXStack.Setup(context, camera, postFXSettings);
+        postFXStack.Setup(context, camera, postFXSettings, useHDR);
         buffer.EndSample(SampleName);
 		//清理Camera绘制目标
         Setup();
@@ -81,7 +85,8 @@ public partial class CameraRenderer {
             }
             buffer.GetTemporaryRT(
                 frameBufferId, camera.pixelWidth, camera.pixelHeight,
-                32, FilterMode.Bilinear, RenderTextureFormat.Default
+                32, FilterMode.Bilinear, useHDR ?
+					RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default
             );
             buffer.SetRenderTarget(
                 frameBufferId,
