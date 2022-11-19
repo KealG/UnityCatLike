@@ -90,6 +90,16 @@ Shader "Hidden/Custom RP/Post FX Stack" {
 				#pragma fragment CopyPassFragment
 			ENDHLSL
 		}	
+	
+		Pass {
+			Name "ACES Mapping"
+			
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment ToneMappingACESPassFragment
+			ENDHLSL
+		}
 
 		Pass {
 			Name "Neutral Mapping"

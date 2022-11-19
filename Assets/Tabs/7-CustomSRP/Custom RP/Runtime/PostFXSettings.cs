@@ -65,7 +65,7 @@ public class PostFXSettings : ScriptableObject
     public struct ToneMappingSettings
     {
 
-        public enum Mode { None = -1, Neutral, Reinhard }
+        public enum Mode { None = -1, ACES, Neutral, Reinhard }
 
         public Mode mode;
     }
