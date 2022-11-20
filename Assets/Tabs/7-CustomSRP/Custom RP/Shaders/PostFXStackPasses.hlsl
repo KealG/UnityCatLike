@@ -273,8 +273,9 @@ float4 _ColorGradingLUTParameters;
 bool _ColorGradingLUTInLogC;
 
 float3 GetColorGradedLUT (float2 uv, bool useACES = false) {
+	//GetLutStripValue找到当前uv坐标对应色值
 	float3 color = GetLutStripValue(uv, _ColorGradingLUTParameters);
-	//LogCToLinear change the value range from [0,1] to [0, 59.x]
+	//LogCToLinear change the value range from [0,59.x] to [0, 1]，这里是因为本来我们得到的是线性空间的颜色，但我们期望扩大所支持的范围假设其在LogC空间中，通过将输入颜色解释为在 Log C 空间中来做到这一点
 	return ColorGrade(_ColorGradingLUTInLogC ? LogCToLinear(color) : color, useACES);
 }
 
