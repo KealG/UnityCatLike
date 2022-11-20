@@ -115,4 +115,70 @@ public class PostFXSettings : ScriptableObject
     WhiteBalanceSettings whiteBalance = default;
 
     public WhiteBalanceSettings WhiteBalance => whiteBalance;
+
+    [Serializable]
+    public struct SplitToningSettings
+    {
+
+        [ColorUsage(false)]
+        public Color shadows, highlights;
+
+        [Range(-100f, 100f)]
+        public float balance;
+    }
+
+    //色调分离
+    [SerializeField]
+    SplitToningSettings splitToning = new SplitToningSettings
+    {
+        shadows = Color.gray,
+        highlights = Color.gray
+    };
+
+    public SplitToningSettings SplitToning => splitToning;
+
+    //通道混合
+    [Serializable]
+    public struct ChannelMixerSettings
+    {
+
+        public Vector3 red, green, blue;
+    }
+
+    [SerializeField]
+    ChannelMixerSettings channelMixer = new ChannelMixerSettings
+    {
+        red = Vector3.right,
+        green = Vector3.up,
+        blue = Vector3.forward
+    };
+
+    public ChannelMixerSettings ChannelMixer => channelMixer;
+
+    //阴影中间调高光
+    [Serializable]
+    public struct ShadowsMidtonesHighlightsSettings
+    {
+
+        [ColorUsage(false, true)]
+        public Color shadows, midtones, highlights;
+
+        [Range(0f, 2f)]
+        public float shadowsStart, shadowsEnd, highlightsStart, highLightsEnd;
+    }
+
+    [SerializeField]
+    ShadowsMidtonesHighlightsSettings
+        shadowsMidtonesHighlights = new ShadowsMidtonesHighlightsSettings
+        {
+            shadows = Color.white,
+            midtones = Color.white,
+            highlights = Color.white,
+            shadowsEnd = 0.3f,
+            highlightsStart = 0.55f,
+            highLightsEnd = 1f
+        };
+
+    public ShadowsMidtonesHighlightsSettings ShadowsMidtonesHighlights =>
+        shadowsMidtonesHighlights;
 }
