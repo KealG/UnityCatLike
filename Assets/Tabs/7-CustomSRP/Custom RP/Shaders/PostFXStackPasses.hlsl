@@ -174,10 +174,17 @@ float4 BloomPrefilterFirefliesPassFragment (Varyings input) : SV_TARGET {
 //////////////////////////Color Grading
 float4 _ColorAdjustments;
 float4 _ColorFilter;
+float4 _WhiteBalance;
 
 //曝光
 float3 ColorGradePostExposure (float3 color) {
 	return color * _ColorAdjustments.x;
+}
+
+float3 ColorGradeWhiteBalance (float3 color) {
+	color = LinearToLMS(color);
+	color *= _WhiteBalance.rgb;
+	return LMSToLinear(color);
 }
 
 //对比度
@@ -209,6 +216,7 @@ float3 ColorGradingSaturation (float3 color) {
 float3 ColorGrade (float3 color) {
 	color = min(color, 60.0);
 	color = ColorGradePostExposure(color);
+	color = ColorGradeWhiteBalance(color);
 	color = ColorGradingContrast(color);
 	color = ColorGradeColorFilter(color);
 	color = ColorGradingHueShift(color);

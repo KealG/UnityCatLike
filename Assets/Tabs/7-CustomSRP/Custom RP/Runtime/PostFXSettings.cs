@@ -102,4 +102,17 @@ public class PostFXSettings : ScriptableObject
     };
 
     public ColorAdjustmentsSettings ColorAdjustments => colorAdjustments;
+
+    [Serializable]
+    public struct WhiteBalanceSettings
+    {
+
+        [Range(-100f, 100f)]
+        public float temperature, tint;
+    }
+
+    [SerializeField]
+    WhiteBalanceSettings whiteBalance = default;
+
+    public WhiteBalanceSettings WhiteBalance => whiteBalance;
 }

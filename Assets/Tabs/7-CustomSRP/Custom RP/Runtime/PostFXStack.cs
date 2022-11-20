@@ -49,7 +49,8 @@ public partial class PostFXStack
     bloomIntensityId = Shader.PropertyToID("_BloomIntensity"),
     bloomResultId = Shader.PropertyToID("_BloomResult"),
     colorAdjustmentsId = Shader.PropertyToID("_ColorAdjustments"),
-    colorFilterId = Shader.PropertyToID("_ColorFilter");
+    colorFilterId = Shader.PropertyToID("_ColorFilter"),
+    whiteBalanceId = Shader.PropertyToID("_WhiteBalance");
 
     bool useHDR;
 
@@ -173,6 +174,7 @@ public partial class PostFXStack
         return true;
     }
 
+    //色调
     void ConfigureColorAdjustments()
     {
         ColorAdjustmentsSettings colorAdjustments = settings.ColorAdjustments;
@@ -185,9 +187,20 @@ public partial class PostFXStack
         buffer.SetGlobalColor(colorFilterId, colorAdjustments.colorFilter.linear);
     }
 
+    //白平衡
+    void ConfigureWhiteBalance()
+    {
+        WhiteBalanceSettings whiteBalance = settings.WhiteBalance;
+        //设置色温与温度变化的颜色
+        buffer.SetGlobalVector(whiteBalanceId, ColorUtils.ColorBalanceToLMSCoeffs(
+            whiteBalance.temperature, whiteBalance.tint
+        ));
+    }
+
     void DoColorGradingAndToneMapping(int sourceId)
     {
         ConfigureColorAdjustments();
+        ConfigureWhiteBalance();
         ToneMappingSettings.Mode mode = settings.ToneMapping.mode;
         //Pass pass = mode < 0 ? Pass.ToneMappingNone : Pass.ToneMappingACES + (int)mode;
         Pass pass = Pass.ToneMappingNone + (int)mode;
