@@ -105,6 +105,10 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter15\BurnHelper.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Helpers\Rotating.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\FogWithDepthTex.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraSettings.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineCamera.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.Editor.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ReinterpretExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\EdgeTest.shader" />
@@ -175,6 +179,7 @@
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter8\Chapter8-BlendOperations.shader" />
     <None Include="Assets\IGGWorkTest\SimpleGuideFog.shader" />
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\PostFXStackPasses.hlsl" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\UICustomBlending.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\8\AlphaBlendZWrite.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\9\ForwardRendering.shader" />
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\ShaderLibrary\Shadows.hlsl" />

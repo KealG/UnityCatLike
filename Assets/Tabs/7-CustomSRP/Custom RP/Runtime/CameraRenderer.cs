@@ -25,6 +25,9 @@ public partial class CameraRenderer {
     PostFXStack postFXStack = new PostFXStack();
 
     bool useHDR;
+
+    static CameraSettings defaultCameraSettings = new CameraSettings();
+
     public void Render (
 		ScriptableRenderContext context, Camera camera, bool allowHDR,
         bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject,
@@ -34,7 +37,12 @@ public partial class CameraRenderer {
 		this.context = context;
 		this.camera = camera;
 
-		PrepareBuffer();
+		//自定义相机设置脚本
+        var crpCamera = camera.GetComponent<CustomRenderPipelineCamera>();
+        CameraSettings cameraSettings =
+            crpCamera ? crpCamera.Settings : defaultCameraSettings;
+
+        PrepareBuffer();
 		PrepareForSceneWindow();
 		if (!Cull(shadowSettings.maxDistance)) {
 			return;
@@ -45,7 +53,8 @@ public partial class CameraRenderer {
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
         lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject);
-        postFXStack.Setup(context, camera, postFXSettings, useHDR, colorLUTResolution);
+        postFXStack.Setup(context, camera, postFXSettings, useHDR, colorLUTResolution,
+            cameraSettings.finalBlendMode);
         buffer.EndSample(SampleName);
 		//清理Camera绘制目标
         Setup();
