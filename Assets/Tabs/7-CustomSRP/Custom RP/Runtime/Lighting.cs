@@ -13,7 +13,7 @@ public class Lighting {
 	static int
 		dirLightCountId = Shader.PropertyToID("_DirectionalLightCount"),
 		dirLightColorsId = Shader.PropertyToID("_DirectionalLightColors"),
-		dirLightDirectionsId = Shader.PropertyToID("_DirectionalLightDirections"),
+		dirLightDirectionsId = Shader.PropertyToID("_DirectionalLightDirectionsAndMasks"),
 		dirLightShadowDataId =
 			Shader.PropertyToID("_DirectionalLightShadowData");
 
@@ -26,7 +26,7 @@ public class Lighting {
 		otherLightCountId = Shader.PropertyToID("_OtherLightCount"),
 		otherLightColorsId = Shader.PropertyToID("_OtherLightColors"),
 		otherLightPositionsId = Shader.PropertyToID("_OtherLightPositions"),
-		otherLightDirectionsId = Shader.PropertyToID("_OtherLightDirections"),
+		otherLightDirectionsId = Shader.PropertyToID("_OtherLightDirectionsAndMasks"),
 		otherLightSpotAnglesId = Shader.PropertyToID("_OtherLightSpotAngles"),
 		otherLightShadowDataId = Shader.PropertyToID("_OtherLightShadowData");
 
@@ -47,12 +47,12 @@ public class Lighting {
 
 	public void Setup (
 		ScriptableRenderContext context, CullingResults cullingResults,
-		ShadowSettings shadowSettings, bool useLightsPerObject
-	) {
+		ShadowSettings shadowSettings, bool useLightsPerObject, int renderingLayerMask
+    ) {
 		this.cullingResults = cullingResults;
 		buffer.BeginSample(bufferName);
 		shadows.Setup(context, cullingResults, shadowSettings);
-		SetupLights(useLightsPerObject);
+		SetupLights(useLightsPerObject, renderingLayerMask);
 		shadows.Render();
 		buffer.EndSample(bufferName);
 		context.ExecuteCommandBuffer(buffer);
@@ -63,7 +63,7 @@ public class Lighting {
 		shadows.Cleanup();
 	}
 
-	void SetupLights (bool useLightsPerObject) {
+	void SetupLights (bool useLightsPerObject, int renderingLayerMask) {
 		NativeArray<int> indexMap = useLightsPerObject ?
 			cullingResults.GetLightIndexMap(Allocator.Temp) : default;
 		NativeArray<VisibleLight> visibleLights = cullingResults.visibleLights;
@@ -73,27 +73,34 @@ public class Lighting {
 			int newIndex = -1;
 			VisibleLight visibleLight = visibleLights[i];
             Light light = visibleLight.light;
-            switch (visibleLight.lightType) {
-				case LightType.Directional:
-					if (dirLightCount < maxDirLightCount) {
-						SetupDirectionalLight(
-							dirLightCount++, i, ref visibleLight, light
-                        );
-					}
-					break;
-				case LightType.Point:
-					if (otherLightCount < maxOtherLightCount) {
-						newIndex = otherLightCount;
-						SetupPointLight(otherLightCount++, i, ref visibleLight, light);
-					}
-					break;
-				case LightType.Spot:
-					if (otherLightCount < maxOtherLightCount) {
-						newIndex = otherLightCount;
-						SetupSpotLight(otherLightCount++, i, ref visibleLight, light);
-					}
-					break;
-			}
+			if ((light.renderingLayerMask & renderingLayerMask) != 0)
+			{
+                switch (visibleLight.lightType)
+                {
+                    case LightType.Directional:
+                        if (dirLightCount < maxDirLightCount)
+                        {
+                            SetupDirectionalLight(
+                                dirLightCount++, i, ref visibleLight, light
+                            );
+                        }
+                        break;
+                    case LightType.Point:
+                        if (otherLightCount < maxOtherLightCount)
+                        {
+                            newIndex = otherLightCount;
+                            SetupPointLight(otherLightCount++, i, ref visibleLight, light);
+                        }
+                        break;
+                    case LightType.Spot:
+                        if (otherLightCount < maxOtherLightCount)
+                        {
+                            newIndex = otherLightCount;
+                            SetupSpotLight(otherLightCount++, i, ref visibleLight, light);
+                        }
+                        break;
+                }
+            }
 			if (useLightsPerObject) {
 				indexMap[i] = newIndex;
 			}

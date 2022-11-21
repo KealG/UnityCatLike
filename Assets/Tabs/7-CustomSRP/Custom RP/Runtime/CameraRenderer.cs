@@ -52,7 +52,8 @@ public partial class CameraRenderer {
         //开始统计本次绘制范围
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
-        lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject);
+        lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject,
+            cameraSettings.maskLights ? cameraSettings.renderingLayerMask : -1);
         postFXStack.Setup(context, camera, postFXSettings, useHDR, colorLUTResolution,
             cameraSettings.finalBlendMode);
         buffer.EndSample(SampleName);

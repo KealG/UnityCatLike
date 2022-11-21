@@ -25,6 +25,8 @@ public class CameraSettings
     [RenderingLayerMaskField]
     public int renderingLayerMask = -1;
 
+    public bool maskLights = false;
+
     //  if (cameraSettings.overridePostFX) {
     //	postFXSettings = cameraSettings.postFXSettings;
     //}
