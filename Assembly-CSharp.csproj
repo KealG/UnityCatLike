@@ -112,6 +112,7 @@
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\RenderingLayerMaskFieldAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\Unlit-particles.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\EdgeTest.shader" />
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\ShaderLibrary\Surface.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\SpecularFragLevel-Phong.shader" />
