@@ -61,6 +61,7 @@
     <Compile Include="Assets\ShaderBook\BookRes\Editor\Chapter3\CustomShaderGUI.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Editor\Chapter10\RenderCubemapWizard.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Editor\CustomShaderGUICatLike.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Editor\RenderingLayerMaskDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

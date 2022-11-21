@@ -58,7 +58,7 @@ public partial class CameraRenderer {
         buffer.EndSample(SampleName);
 		//清理Camera绘制目标
         Setup();
-        DrawVisibleGeometry(useDynamicBatching, useGPUInstancing, useLightsPerObject);
+        DrawVisibleGeometry(useDynamicBatching, useGPUInstancing, useLightsPerObject, cameraSettings.renderingLayerMask);
 		DrawUnsupportedShaders();		
 		DrawGizmosBeforeFX();
         if (postFXStack.IsActive)
@@ -125,7 +125,7 @@ public partial class CameraRenderer {
 		buffer.Clear();
 	}
 
-	void DrawVisibleGeometry (bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject) {
+	void DrawVisibleGeometry (bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject, int renderingLayerMask) {
         PerObjectData lightsPerObjectFlags = useLightsPerObject ?
             PerObjectData.LightData | PerObjectData.LightIndices :
             PerObjectData.None;
@@ -144,7 +144,7 @@ public partial class CameraRenderer {
         };
 		drawingSettings.SetShaderPassName(1, litShaderTagId);
 
-		var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
+		var filteringSettings = new FilteringSettings(RenderQueueRange.opaque, renderingLayerMask: (uint)renderingLayerMask);
 
 		context.DrawRenderers(
 			cullingResults, ref drawingSettings, ref filteringSettings

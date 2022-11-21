@@ -109,6 +109,7 @@
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineCamera.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.Editor.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ReinterpretExtensions.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\RenderingLayerMaskFieldAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\EdgeTest.shader" />

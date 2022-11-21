@@ -22,6 +22,7 @@ public class CameraSettings
 
     public PostFXSettings postFXSettings = default;
 
+    [RenderingLayerMaskField]
     public int renderingLayerMask = -1;
 
     //  if (cameraSettings.overridePostFX) {
