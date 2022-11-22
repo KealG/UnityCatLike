@@ -13,6 +13,8 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 	UNITY_DEFINE_INSTANCED_PROP(float, _ZWrite)
 	UNITY_DEFINE_INSTANCED_PROP(float, _NearFadeDistance)
 	UNITY_DEFINE_INSTANCED_PROP(float, _NearFadeRange)
+	UNITY_DEFINE_INSTANCED_PROP(float, _SoftParticlesDistance)
+	UNITY_DEFINE_INSTANCED_PROP(float, _SoftParticlesRange)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 struct InputConfig {
@@ -25,6 +27,7 @@ struct InputConfig {
 	float3 flipbookUVB;
 	bool flipbookBlending;
 	bool nearFade;
+	bool softParticles;
 };
 
 InputConfig GetInputConfig (float4 positionSS, float2 baseUV, float2 detailUV = 0.0) {
@@ -40,6 +43,7 @@ InputConfig GetInputConfig (float4 positionSS, float2 baseUV, float2 detailUV = 
 	c.flipbookBlending = false;
 	c.fragment = GetFragment(positionSS);
 	c.nearFade = false;
+	c.softParticles = false;
 	return c;
 }
 
@@ -60,6 +64,12 @@ float4 GetBase (InputConfig c) {
 	if (c.nearFade) {
 		float nearAttenuation = (c.fragment.depth - INPUT_PROP(_NearFadeDistance)) /
 			INPUT_PROP(_NearFadeRange);
+		map.a *= saturate(nearAttenuation);
+	}
+	if (c.softParticles) {
+		float depthDelta = c.fragment.bufferDepth - c.fragment.depth;
+		float nearAttenuation = (depthDelta - INPUT_PROP(_SoftParticlesDistance)) /
+			INPUT_PROP(_SoftParticlesRange);
 		map.a *= saturate(nearAttenuation);
 	}
 	return map * color * c.color;

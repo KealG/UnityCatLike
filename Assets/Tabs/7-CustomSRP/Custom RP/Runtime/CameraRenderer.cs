@@ -35,6 +35,8 @@ public partial class CameraRenderer
     Material material;
 
     Texture2D missingTexture;
+
+    static bool copyTextureSupported = false;
     public CameraRenderer(Shader shader)
     {
         material = CoreUtils.CreateEngineMaterial(shader);
@@ -128,13 +130,13 @@ public partial class CameraRenderer
         depthTextureId = Shader.PropertyToID("_CameraDepthTexture"),
         sourceTextureId = Shader.PropertyToID("_SourceTexture");
 
-    void Draw (RenderTargetIdentifier from, RenderTargetIdentifier to) {
+    void Draw (RenderTargetIdentifier from, RenderTargetIdentifier to, bool isDepth = false) {
 		buffer.SetGlobalTexture(sourceTextureId, from);
 		buffer.SetRenderTarget(
 			to, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store
 		);
 		buffer.DrawProcedural(
-			Matrix4x4.identity, material, 0, MeshTopology.Triangles, 3
+			Matrix4x4.identity, material, isDepth ? 1 : 0, MeshTopology.Triangles, 3
 		);        
 	}
     void Setup () {
@@ -249,7 +251,18 @@ public partial class CameraRenderer
                 depthTextureId, camera.pixelWidth, camera.pixelHeight,
                 32, FilterMode.Point, RenderTextureFormat.Depth
             );
-            buffer.CopyTexture(depthAttachmentId, depthTextureId);
+            if (copyTextureSupported) {
+				buffer.CopyTexture(depthAttachmentId, depthTextureId);
+			}
+			else {
+				Draw(depthAttachmentId, depthTextureId, true);
+                buffer.SetRenderTarget(
+                    colorAttachmentId,
+                    RenderBufferLoadAction.Load, RenderBufferStoreAction.Store,
+                    depthAttachmentId,
+                    RenderBufferLoadAction.Load, RenderBufferStoreAction.Store
+                );
+            }
             ExecuteBuffer();
         }
     }
