@@ -62,7 +62,7 @@ float4 UnlitPassFragment (Varyings input) : SV_TARGET {
 	// float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.baseUV);
 	// float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
 	InputConfig config = GetInputConfig(input.positionCS_SS, input.baseUV);
-	return float4(config.fragment.depth.xxx / 20.0, 1.0);
+	// return float4(config.fragment.depth.xxx / 20.0, 1.0);
 #if defined(_VERTEX_COLORS)
 	config.color = input.color;
 #endif
@@ -70,6 +70,10 @@ float4 UnlitPassFragment (Varyings input) : SV_TARGET {
 #if defined(_FLIPBOOK_BLENDING)
 	config.flipbookUVB = input.flipbookUVB;
 	config.flipbookBlending = true;
+#endif
+
+#if defined(_NEAR_FADE)
+	config.nearFade = true;
 #endif
 
 	float4 base = GetBase(config);
