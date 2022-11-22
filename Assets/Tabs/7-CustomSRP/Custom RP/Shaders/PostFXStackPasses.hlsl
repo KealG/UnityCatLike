@@ -5,7 +5,7 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Filtering.hlsl"
 
 struct Varyings {
-	float4 positionCS : SV_POSITION;
+	float4 positionCS_SS : SV_POSITION;
 	float2 screenUV : VAR_SCREEN_UV;
 };
 
@@ -19,7 +19,7 @@ float4 GetSourceTexelSize () {
 
 Varyings DefaultPassVertex (uint vertexID : SV_VertexID) {
 	Varyings output;
-	output.positionCS = float4(
+	output.positionCS_SS = float4(
 		vertexID <= 1 ? -1.0 : 3.0,
 		vertexID == 1 ? 3.0 : -1.0,
 		0.0, 1.0
@@ -37,7 +37,7 @@ Varyings DefaultPassVertex (uint vertexID : SV_VertexID) {
 
 TEXTURE2D(_PostFXSource);
 TEXTURE2D(_PostFXSource2);
-SAMPLER(sampler_linear_clamp);
+// SAMPLER(sampler_linear_clamp);
 
 float4 GetSource(float2 screenUV) {
 	return SAMPLE_TEXTURE2D_LOD(_PostFXSource, sampler_linear_clamp, screenUV, 0);

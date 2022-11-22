@@ -65,6 +65,7 @@
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Lighting.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter10\ProceduralTextureGeneration.cs" />
     <Compile Include="Assets\IGGWorkTest\ProcedualMesh\ProcedualMesh.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.Editor.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\PerObjectMaterialProperties.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\BrightnessSaturationContrast.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Examples\MeshBall.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter13\MotionBlurWithDepthTexture.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\Shadows.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\EdgeTest.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\RenderingLayerMaskFieldAttribute.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\BrightnessSaturationAndContrast.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\PostEffectsBase.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\MotionBlurEffect.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\EdgeDetection.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFXSettings.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\PostFXStack.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineCamera.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter13\EdgeDetectNormalsAndDepth.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\GaussianBlur.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter12\MotionBlur.cs" />
@@ -103,13 +106,10 @@
     <Compile Include="Assets\Tabs\1-Basics\BuildingAGraph\GraphAni.cs" />
     <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\LodGroupDIY.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Chapter15\BurnHelper.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ReinterpretExtensions.cs" />
+    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraSettings.cs" />
     <Compile Include="Assets\ShaderBook\BookRes\Scripts\Helpers\Rotating.cs" />
     <Compile Include="Assets\ShaderBook\Shader\Shader-Tutorial\13\FogWithDepthTex.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CameraSettings.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineCamera.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\CustomRenderPipelineAsset.Editor.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\ReinterpretExtensions.cs" />
-    <Compile Include="Assets\Tabs\7-CustomSRP\Custom RP\Runtime\RenderingLayerMaskFieldAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\Unlit-particles.shader" />
@@ -158,6 +158,7 @@
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\MotionBlurEffect.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\10\Mirror.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter9\Chapter9-Shadow.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\ShaderLibrary\Fragment.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\12\GaussianBlur.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\SpecularFragLevel-BlinPhong.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\9\AttenuationAndShadowUseBuildInFunction.shader" />

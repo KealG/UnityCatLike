@@ -14,14 +14,17 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 struct InputConfig {
+	Fragment fragment;
 	float4 color;
 	float2 baseUV;
 	float2 detailUV;
 	bool useMask;
 	bool useDetail;
+	float3 flipbookUVB;
+	bool flipbookBlending;
 };
 
-InputConfig GetInputConfig (float2 baseUV, float2 detailUV = 0.0) {
+InputConfig GetInputConfig (float4 positionSS, float2 baseUV, float2 detailUV = 0.0) {
 	InputConfig c;
 	c.color = 1.0;
 	c.baseUV = baseUV;
@@ -29,6 +32,9 @@ InputConfig GetInputConfig (float2 baseUV, float2 detailUV = 0.0) {
 	c.useMask = false;
 	//额外的R：反射率 B：平滑度 信息贴图
 	c.useDetail = false;
+	
+	c.flipbookUVB = 0.0;
+	c.flipbookBlending = false;
 	return c;
 }
 
@@ -39,6 +45,12 @@ float2 TransformBaseUV (float2 baseUV) {
 
 float4 GetBase (InputConfig c) {
 	float4 map = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, c.baseUV);
+	if (c.flipbookBlending) {
+		map = lerp(
+			map, SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, c.flipbookUVB.xy),
+			c.flipbookUVB.z
+		);
+	}
 	float4 color = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
 	return map * color * c.color;
 }
