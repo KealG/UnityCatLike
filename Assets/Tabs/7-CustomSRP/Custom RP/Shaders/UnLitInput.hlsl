@@ -35,6 +35,7 @@ InputConfig GetInputConfig (float4 positionSS, float2 baseUV, float2 detailUV = 
 	
 	c.flipbookUVB = 0.0;
 	c.flipbookBlending = false;
+	c.fragment = GetFragment(positionSS);
 	return c;
 }
 

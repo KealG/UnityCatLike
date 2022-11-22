@@ -9,7 +9,7 @@ struct Varyings {
 	float2 screenUV : VAR_SCREEN_UV;
 };
 
-float4 _ProjectionParams;
+// float4 _ProjectionParams;
 
 float4 _PostFXSource_TexelSize;
 
