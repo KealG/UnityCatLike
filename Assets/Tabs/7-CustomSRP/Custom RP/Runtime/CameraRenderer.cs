@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static CustomRenderPipelineAsset;
 
-public partial class CameraRenderer {
+public partial class CameraRenderer
+{
 
 	const string bufferName = "Render Camera";
 
@@ -32,18 +34,27 @@ public partial class CameraRenderer {
 
     Material material;
 
+    Texture2D missingTexture;
     public CameraRenderer(Shader shader)
     {
         material = CoreUtils.CreateEngineMaterial(shader);
+        missingTexture = new Texture2D(1, 1)
+        {
+            hideFlags = HideFlags.HideAndDontSave,
+            name = "Missing"
+        };
+        missingTexture.SetPixel(0, 0, Color.white * 0.5f);
+        missingTexture.Apply(true, true);
     }
 
     public void Dispose()
     {
         CoreUtils.Destroy(material);
+        CoreUtils.Destroy(missingTexture);
     }
 
     public void Render (
-		ScriptableRenderContext context, Camera camera, bool allowHDR,
+		ScriptableRenderContext context, Camera camera, CameraBufferSettings bufferSettings,
         bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject,
         ShadowSettings shadowSettings, PostFXSettings postFXSettings,
         int colorLUTResolution
@@ -61,9 +72,16 @@ public partial class CameraRenderer {
 		if (!Cull(shadowSettings.maxDistance)) {
 			return;
 		}
-
-        useHDR = allowHDR && camera.allowHDR;
-        useDepthTexture = true;
+        if (camera.cameraType == CameraType.Reflection)
+        {
+            useDepthTexture = bufferSettings.copyDepthReflections;
+        }
+        else
+        {
+            useDepthTexture = bufferSettings.copyDepth && cameraSettings.copyDepth;
+        }
+        useHDR = bufferSettings.allowHDR && camera.allowHDR;
+        //useDepthTexture = true;
         //开始统计本次绘制范围
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
@@ -156,7 +174,8 @@ public partial class CameraRenderer {
 				camera.backgroundColor.linear : Color.clear
 		);
 		buffer.BeginSample(SampleName);
-		ExecuteBuffer();
+        buffer.SetGlobalTexture(depthTextureId, missingTexture);
+        ExecuteBuffer();
 	}
 
 	void Submit () {
