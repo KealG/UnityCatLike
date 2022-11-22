@@ -141,6 +141,7 @@
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter6\Chapter6-BlinnPhong.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\7\NormalMapTangentSpace.shader" />
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\PostFx.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\CameraRenderer.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter15\Chapter15-WaterWave.shader" />
     <None Include="Assets\Tabs\1-Basics\BuildingAGraph\PointerSurface.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\DiffuseHalfLambertLevel.shader" />
@@ -226,6 +227,7 @@
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\9\Shadow.shader" />
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\UnLitInput.hlsl" />
     <None Include="Assets\IGGWorkTest\ProcedualMesh\CityFog.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\CameraRendererPasses.hlsl" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\10\GlassRefraction.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\6\DiffuseVertexLevel.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter9\Chapter9-AlphaBlendWithShadow.shader" />

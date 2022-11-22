@@ -21,9 +21,12 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
     [SerializeField]
     ColorLUTResolution colorLUTResolution = ColorLUTResolution._32;
 
+    [SerializeField]
+    Shader cameraRendererShader = default;
     protected override RenderPipeline CreatePipeline () {
 		return new CustomRenderPipeline(
-            allowHDR, useDynamicBatching, useGPUInstancing, useSRPBatcher, useLightsPerObject, shadows, postFXSettings, (int)colorLUTResolution
+            allowHDR, useDynamicBatching, useGPUInstancing, useSRPBatcher, useLightsPerObject, shadows, postFXSettings, (int)colorLUTResolution,
+            cameraRendererShader
         );
 	}
 }

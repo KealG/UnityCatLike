@@ -3,9 +3,9 @@ using UnityEngine.Rendering;
 
 public partial class CustomRenderPipeline : RenderPipeline {
 
-	CameraRenderer renderer = new CameraRenderer();
+    CameraRenderer renderer;
 
-	bool useDynamicBatching, useGPUInstancing, useLightsPerObject;
+    bool useDynamicBatching, useGPUInstancing, useLightsPerObject;
 
     ShadowSettings shadowSettings;
 
@@ -18,7 +18,7 @@ public partial class CustomRenderPipeline : RenderPipeline {
     public CustomRenderPipeline (
         bool allowHDR, bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, bool useLightsPerObject,
         ShadowSettings shadowSettings,
-        PostFXSettings postFXSettings, int colorLUTResolution
+        PostFXSettings postFXSettings, int colorLUTResolution, Shader cameraRendererShader
     ) {
         this.colorLUTResolution = colorLUTResolution;
         this.allowHDR = allowHDR;
@@ -29,6 +29,7 @@ public partial class CustomRenderPipeline : RenderPipeline {
 		GraphicsSettings.lightsUseLinearIntensity = true;
         this.shadowSettings = shadowSettings;
         this.useLightsPerObject = useLightsPerObject;
+        renderer = new CameraRenderer(cameraRendererShader);
         InitializeForEditor();
     }
 
