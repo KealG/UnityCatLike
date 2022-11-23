@@ -39,7 +39,9 @@ public partial class PostFXStack
         ToneMappingReinhard,
         ApplyColorGrading,
         FinalRescale,
-        FXAA
+        FXAA,
+        ApplyColorGradingWithLuma,
+        FXAAWithLuma
     }
 
     const int maxBloomPyramidLevels = 16;
@@ -69,7 +71,7 @@ public partial class PostFXStack
     colorGradingLUTParametersId = Shader.PropertyToID("_ColorGradingLUTParameters"),
     colorGradingLUTInLogId = Shader.PropertyToID("_ColorGradingLUTInLogC");
 
-    bool useHDR;
+    bool keepAlpha, useHDR;
 
     int colorLUTResolution;
 
@@ -293,11 +295,12 @@ public partial class PostFXStack
         buffer.SetGlobalFloat(finalDstBlendId, 0f);
         if (fxaa.enabled)
         {
+            buffer.SetGlobalVector(fxaaConfigId, new Vector4(fxaa.fixedThreshold, 0f));
             buffer.GetTemporaryRT(
                 colorGradingResultId, bufferSize.x, bufferSize.y, 0,
                 FilterMode.Bilinear, RenderTextureFormat.Default
             );
-            Draw(sourceId, colorGradingResultId, Pass.ApplyColorGrading);
+            Draw(sourceId, colorGradingResultId, keepAlpha ? Pass.ApplyColorGrading : Pass.ApplyColorGradingWithLuma);
         }
 
         //Draw(sourceId, BuiltinRenderTextureType.CameraTarget, Pass.Final);
@@ -305,7 +308,7 @@ public partial class PostFXStack
         {
             if (fxaa.enabled)
             {
-                DrawFinal(colorGradingResultId, Pass.FXAA);
+                DrawFinal(colorGradingResultId, keepAlpha ? Pass.FXAA : Pass.FXAAWithLuma);
                 buffer.ReleaseTemporaryRT(colorGradingResultId);
             }
             else
@@ -323,7 +326,7 @@ public partial class PostFXStack
             );
             if (fxaa.enabled)
             {
-                Draw(colorGradingResultId, finalResultId, Pass.FXAA);
+                Draw(colorGradingResultId, finalResultId, keepAlpha ? Pass.FXAA : Pass.FXAAWithLuma);
                 buffer.ReleaseTemporaryRT(colorGradingResultId);
             }
             else
@@ -345,7 +348,7 @@ public partial class PostFXStack
 
     Vector2Int bufferSize;
     public void Setup(
-        ScriptableRenderContext context, Camera camera, Vector2Int bufferSize, PostFXSettings settings,
+        ScriptableRenderContext context, Camera camera, Vector2Int bufferSize, PostFXSettings settings, bool keepAlpha,
         bool useHDR, int colorLUTResolution, CameraSettings.FinalBlendMode finalBlendMode, CameraBufferSettings.BicubicRescalingMode bicubicRescaling,
         CameraBufferSettings.FXAA fxaa
     )
@@ -354,6 +357,7 @@ public partial class PostFXStack
         this.bicubicRescaling = bicubicRescaling;
         this.bufferSize = bufferSize;
         this.colorLUTResolution = colorLUTResolution;
+        this.keepAlpha = keepAlpha;
         this.useHDR = useHDR;
         this.context = context;
         this.camera = camera;
@@ -403,6 +407,8 @@ public partial class PostFXStack
         colorGradingResultId = Shader.PropertyToID("_ColorGradingResult"),
         finalResultId = Shader.PropertyToID("_FinalResult"),
         copyBicubicId = Shader.PropertyToID("_CopyBicubic");
+
+    int fxaaConfigId = Shader.PropertyToID("_FXAAConfig");
 
     CameraBufferSettings.BicubicRescalingMode bicubicRescaling;
     /// <summary>

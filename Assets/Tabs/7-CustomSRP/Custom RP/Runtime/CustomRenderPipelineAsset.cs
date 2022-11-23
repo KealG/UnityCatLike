@@ -41,6 +41,9 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
         {
 
             public bool enabled;
+
+            [Range(0.0312f, 0.0833f)]
+            public float fixedThreshold;
         }
 
         public FXAA fxaa;
@@ -50,7 +53,11 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
     CameraBufferSettings cameraBuffer = new CameraBufferSettings
     {
         allowHDR = true,
-        renderScale = 1f
+        renderScale = 1f,
+        fxaa = new CameraBufferSettings.FXAA
+        {
+            fixedThreshold = 0.0833f
+        }
     };
 
     public enum ColorLUTResolution { _16 = 16, _32 = 32, _64 = 64 }

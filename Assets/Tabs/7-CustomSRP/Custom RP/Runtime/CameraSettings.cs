@@ -47,6 +47,8 @@ public class CameraSettings
 
     public bool allowFXAA = false;
 
+    public bool keepAlpha = false;
+
     //  if (cameraSettings.overridePostFX) {
     //	postFXSettings = cameraSettings.postFXSettings;
     //}
