@@ -30,6 +30,10 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
 
         [Range(0.1f, 2f)]
         public float renderScale;
+
+        public BicubicRescalingMode bicubicRescaling;
+
+        public enum BicubicRescalingMode { Off, UpOnly, UpAndDown }
     }
 
     [SerializeField]
