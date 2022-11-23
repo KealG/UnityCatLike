@@ -295,7 +295,7 @@ public partial class PostFXStack
         buffer.SetGlobalFloat(finalDstBlendId, 0f);
         if (fxaa.enabled)
         {
-            buffer.SetGlobalVector(fxaaConfigId, new Vector4(fxaa.fixedThreshold, 0f));
+            buffer.SetGlobalVector(fxaaConfigId, new Vector4(fxaa.fixedThreshold, fxaa.relativeThreshold, 0f));
             buffer.GetTemporaryRT(
                 colorGradingResultId, bufferSize.x, bufferSize.y, 0,
                 FilterMode.Bilinear, RenderTextureFormat.Default

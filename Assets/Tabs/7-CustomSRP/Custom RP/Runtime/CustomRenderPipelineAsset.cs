@@ -44,6 +44,9 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
 
             [Range(0.0312f, 0.0833f)]
             public float fixedThreshold;
+
+            [Range(0.063f, 0.333f)]
+            public float relativeThreshold;
         }
 
         public FXAA fxaa;
@@ -56,7 +59,8 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
         renderScale = 1f,
         fxaa = new CameraBufferSettings.FXAA
         {
-            fixedThreshold = 0.0833f
+            fixedThreshold = 0.0833f,
+            relativeThreshold = 0.166f
         }
     };
 
