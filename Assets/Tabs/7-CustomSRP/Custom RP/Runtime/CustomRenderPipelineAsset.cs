@@ -47,6 +47,13 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
 
             [Range(0.063f, 0.333f)]
             public float relativeThreshold;
+
+            [Range(0f, 1f)]
+            public float subpixelBlending;
+
+            public enum Quality { Low, Medium, High }
+
+            public Quality quality;
         }
 
         public FXAA fxaa;
@@ -60,7 +67,8 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
         fxaa = new CameraBufferSettings.FXAA
         {
             fixedThreshold = 0.0833f,
-            relativeThreshold = 0.166f
+            relativeThreshold = 0.166f,
+            subpixelBlending = 0.75f
         }
     };
 

@@ -262,6 +262,33 @@ public partial class PostFXStack
         ));
     }
 
+    const string
+        fxaaQualityLowKeyword = "FXAA_QUALITY_LOW",
+        fxaaQualityMediumKeyword = "FXAA_QUALITY_MEDIUM";
+
+
+    void ConfigureFXAA()
+    {
+        if (fxaa.quality == CameraBufferSettings.FXAA.Quality.Low)
+        {
+            buffer.EnableShaderKeyword(fxaaQualityLowKeyword);
+            buffer.DisableShaderKeyword(fxaaQualityMediumKeyword);
+        }
+        else if (fxaa.quality == CameraBufferSettings.FXAA.Quality.Medium)
+        {
+            buffer.DisableShaderKeyword(fxaaQualityLowKeyword);
+            buffer.EnableShaderKeyword(fxaaQualityMediumKeyword);
+        }
+        else
+        {
+            buffer.DisableShaderKeyword(fxaaQualityLowKeyword);
+            buffer.DisableShaderKeyword(fxaaQualityMediumKeyword);
+        }
+        buffer.SetGlobalVector(fxaaConfigId, new Vector4(
+            fxaa.fixedThreshold, fxaa.relativeThreshold, fxaa.subpixelBlending
+        ));
+
+    }
     void DoFinal(int sourceId)
     {
         ConfigureColorAdjustments();
@@ -295,7 +322,8 @@ public partial class PostFXStack
         buffer.SetGlobalFloat(finalDstBlendId, 0f);
         if (fxaa.enabled)
         {
-            buffer.SetGlobalVector(fxaaConfigId, new Vector4(fxaa.fixedThreshold, fxaa.relativeThreshold, 0f));
+            //buffer.SetGlobalVector(fxaaConfigId, new Vector4(fxaa.fixedThreshold, fxaa.relativeThreshold, fxaa.subpixelBlending));
+            ConfigureFXAA();
             buffer.GetTemporaryRT(
                 colorGradingResultId, bufferSize.x, bufferSize.y, 0,
                 FilterMode.Bilinear, RenderTextureFormat.Default

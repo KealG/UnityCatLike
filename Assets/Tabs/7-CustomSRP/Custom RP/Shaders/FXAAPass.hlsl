@@ -46,12 +46,13 @@ float GetSubpixelBlendFactor (LumaNeighborhood luma) {
 	filter *= 1.0 / 12.0;
 	filter = saturate(filter / luma.range);
 	filter = smoothstep(0, 1, filter);
-	return filter * filter;
+	return filter * filter * _FXAAConfig.z;
 }
 
 struct FXAAEdge {
 	bool isHorizontal;
 	float pixelStep;
+	float lumaGradient, otherLuma;
 };
 
 bool IsHorizontalEdge (LumaNeighborhood luma) {
@@ -86,19 +87,126 @@ FXAAEdge GetFXAAEdge (LumaNeighborhood luma) {
 
 	if (gradientP < gradientN) {
 		edge.pixelStep = -edge.pixelStep;
+		edge.lumaGradient = gradientN;
+		edge.otherLuma = lumaN;
+	}
+	else {
+		edge.lumaGradient = gradientP;
+		edge.otherLuma = lumaP;
 	}
 	return edge;
+}
+
+#if defined(FXAA_QUALITY_LOW)
+	#define EXTRA_EDGE_STEPS 3
+	#define EDGE_STEP_SIZES 1.5, 2.0, 2.0
+	#define LAST_EDGE_STEP_GUESS 8.0
+#elif defined(FXAA_QUALITY_MEDIUM)
+	#define EXTRA_EDGE_STEPS 8
+	#define EDGE_STEP_SIZES 1.5, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 4.0
+	#define LAST_EDGE_STEP_GUESS 8.0
+#else
+	#define EXTRA_EDGE_STEPS 10
+	#define EDGE_STEP_SIZES 1.0, 1.0, 1.0, 1.0, 1.5, 2.0, 2.0, 2.0, 2.0, 4.0
+	#define LAST_EDGE_STEP_GUESS 8.0
+
+#endif
+
+static const float edgeStepSizes[EXTRA_EDGE_STEPS] = { EDGE_STEP_SIZES };
+
+float GetEdgeBlendFactor (LumaNeighborhood luma, FXAAEdge edge, float2 uv) {
+	float2 edgeUV = uv;
+	float2 uvStep = 0.0;
+	if (edge.isHorizontal) {
+		edgeUV.y += 0.5 * edge.pixelStep;
+		uvStep.x = GetSourceTexelSize().x;
+	}
+	else {
+		edgeUV.x += 0.5 * edge.pixelStep;
+		uvStep.y = GetSourceTexelSize().y;
+	}
+	float edgeLuma = 0.5 * (luma.m + edge.otherLuma);
+	float gradientThreshold = 0.25 * edge.lumaGradient;
+
+	float2 uvP = edgeUV + uvStep;
+	float lumaDeltaP = GetLuma(uvP) - edgeLuma;
+	bool atEndP = abs(lumaDeltaP) >= gradientThreshold;
+
+	UNITY_UNROLL
+	for (int i = 0; i < EXTRA_EDGE_STEPS  && !atEndP; i++) {		
+		uvP += uvStep * edgeStepSizes[i];
+		lumaDeltaP = GetLuma(uvP) - edgeLuma;
+		atEndP = abs(lumaDeltaP) >= gradientThreshold;
+		if (!atEndP) 
+		{
+			uvP += uvStep * LAST_EDGE_STEP_GUESS;
+		}
+	}
+
+	float2 uvN = edgeUV - uvStep;
+	float lumaDeltaN = GetLuma(uvN) - edgeLuma;
+	bool atEndN = abs(lumaDeltaN) >= gradientThreshold;
+
+	UNITY_UNROLL
+	for (int i = 0; i < EXTRA_EDGE_STEPS  && !atEndN; i++) 
+	{					
+		uvN -= uvStep * edgeStepSizes[i];
+		lumaDeltaN = GetLuma(uvN) - edgeLuma;
+		atEndN = abs(lumaDeltaN) >= gradientThreshold;
+		if (!atEndN) 
+		{
+			uvN -= uvStep * LAST_EDGE_STEP_GUESS;
+		}
+	}
+	float distanceToEndP, distanceToEndN;
+	if (edge.isHorizontal) {
+		distanceToEndP = uvP.x - uv.x;
+		distanceToEndN = uv.x - uvN.x;
+	}
+	else {
+		distanceToEndP = uvP.y - uv.y;
+		distanceToEndN = uv.y - uvN.y;
+	}
+
+	float distanceToNearestEnd;
+	bool deltaSign;
+	if (distanceToEndP <= distanceToEndN) {
+		distanceToNearestEnd = distanceToEndP;
+		deltaSign = lumaDeltaP >= 0;
+	}
+	else {
+		distanceToNearestEnd = distanceToEndN;
+		deltaSign = lumaDeltaN >= 0;
+	}
+
+	if (deltaSign == (luma.m - edgeLuma >= 0)) {
+		return 0.0;
+	}
+	else {
+		return 0.5 - distanceToNearestEnd / (distanceToEndP + distanceToEndN);
+	}
 }
 
 float4 FXAAPassFragment (Varyings input) : SV_TARGET {
 	LumaNeighborhood luma = GetLumaNeighborhood(input.screenUV);
 	if (CanSkipFXAA(luma)) {
-		return 0.0;
+		GetSource(input.screenUV);
 	}	
 
 	FXAAEdge edge = GetFXAAEdge(luma);
-	
-	return edge.pixelStep > 0.0 ? float4(1.0, 0.0, 0.0, 0.0) : 1.0;
+	float blendFactor = max(
+		GetSubpixelBlendFactor(luma), GetEdgeBlendFactor (luma, edge, input.screenUV)
+	);
+	// return blendFactor;
+	float2 blendUV = input.screenUV;
+	if (edge.isHorizontal) {
+		blendUV.y += blendFactor * edge.pixelStep;
+	}
+	else {
+		blendUV.x += blendFactor * edge.pixelStep;
+	}
+
+	return GetSource(blendUV);
 }
 
 #endif
