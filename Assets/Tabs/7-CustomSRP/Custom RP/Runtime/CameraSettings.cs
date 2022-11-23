@@ -4,7 +4,8 @@ using UnityEngine.Rendering;
 [Serializable]
 public class CameraSettings
 {
-    public bool copyDepth = true;
+    public bool copyDepth = true, copyColor = true;
+
     [Serializable]
     public struct FinalBlendMode
     {

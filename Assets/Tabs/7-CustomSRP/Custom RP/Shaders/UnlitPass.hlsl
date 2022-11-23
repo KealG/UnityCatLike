@@ -64,6 +64,7 @@ float4 UnlitPassFragment (Varyings input) : SV_TARGET {
 	InputConfig config = GetInputConfig(input.positionCS_SS, input.baseUV);
 	// return float4(config.fragment.depth.xxx / 20.0, 1.0);
 	// return float4(config.fragment.bufferDepth.xxx / 20.0, 1.0);
+	// return GetBufferColor(config.fragment, 0.05);
 
 #if defined(_VERTEX_COLORS)
 	config.color = input.color;
@@ -83,9 +84,23 @@ float4 UnlitPassFragment (Varyings input) : SV_TARGET {
 #endif
 
 	float4 base = GetBase(config);
-	#if defined(_CLIPPING)
-		clip(base.a - GetCutoff(input.baseUV));
-	#endif
+#if defined(_CLIPPING)
+	clip(base.a - GetCutoff(input.baseUV));
+#endif
+
+#if defined(_DISTORTION)
+//TODO 搞清楚这里必须要乘以a才不会报错的原因
+	float2 distortion = GetDistortion(config) * base.a;
+
+	// base.rgb = GetBufferColor(config.fragment, distortion).rgb;
+
+	// base = GetBufferColor(config.fragment, distortion);
+	base.rgb = lerp(
+			GetBufferColor(config.fragment, distortion).rgb, base.rgb,
+			saturate(base.a - GetDistortionBlend(config))
+		);
+#endif
+
 	return float4(base.rgb, GetFinalAlpha(base.a));
 }
 

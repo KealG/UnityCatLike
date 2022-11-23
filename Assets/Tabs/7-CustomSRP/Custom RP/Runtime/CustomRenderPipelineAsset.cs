@@ -25,6 +25,8 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
         public bool copyDepth;
 
         public bool copyDepthReflections;
+
+        public bool copyColor, copyColorReflection;
     }
 
     [SerializeField]
