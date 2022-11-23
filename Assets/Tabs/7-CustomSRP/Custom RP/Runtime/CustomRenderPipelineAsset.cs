@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 [CreateAssetMenu(menuName = "Rendering/Custom Render Pipeline")]
@@ -34,6 +35,15 @@ public partial class CustomRenderPipelineAsset : RenderPipelineAsset {
         public BicubicRescalingMode bicubicRescaling;
 
         public enum BicubicRescalingMode { Off, UpOnly, UpAndDown }
+
+        [Serializable]
+        public struct FXAA
+        {
+
+            public bool enabled;
+        }
+
+        public FXAA fxaa;
     }
 
     [SerializeField]

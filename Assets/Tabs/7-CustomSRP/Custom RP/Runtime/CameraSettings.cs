@@ -45,6 +45,8 @@ public class CameraSettings
             scale * renderScale;
     }
 
+    public bool allowFXAA = false;
+
     //  if (cameraSettings.overridePostFX) {
     //	postFXSettings = cameraSettings.postFXSettings;
     //}

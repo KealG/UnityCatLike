@@ -167,6 +167,7 @@
     <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\Lit.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\14\HatchingShading.shader" />
     <None Include="Assets\ShaderBook\Shader\Shader-Tutorial\3\NewUnlitShader.shader" />
+    <None Include="Assets\Tabs\7-CustomSRP\Custom RP\Shaders\FXAAPass.hlsl" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter17\Chapter17-NormalExtrusion.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter6\Chapter6-BlinnPhongUseBuildInFunctions.shader" />
     <None Include="Assets\ShaderBook\BookRes\Shaders\Chapter6\Chapter6-DiffuseVertexLevel.shader" />

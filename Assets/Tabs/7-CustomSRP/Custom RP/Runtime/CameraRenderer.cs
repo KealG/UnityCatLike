@@ -73,14 +73,6 @@ public partial class CameraRenderer
         CameraSettings cameraSettings =
             crpCamera ? crpCamera.Settings : defaultCameraSettings;
 
-        float renderScale = cameraSettings.GetRenderScale(bufferSettings.renderScale);
-        useScaledRendering = renderScale < 0.99f || renderScale > 1.01f;
-
-        PrepareBuffer();
-		PrepareForSceneWindow();
-		if (!Cull(shadowSettings.maxDistance)) {
-			return;
-		}
         if (camera.cameraType == CameraType.Reflection)
         {
             useColorTexture = bufferSettings.copyColorReflection;
@@ -91,6 +83,18 @@ public partial class CameraRenderer
             useColorTexture = bufferSettings.copyColor && cameraSettings.copyColor;
             useDepthTexture = bufferSettings.copyDepth && cameraSettings.copyDepth;
         }
+        if (cameraSettings.overridePostFX) {
+			postFXSettings = cameraSettings.postFXSettings;
+		}
+        float renderScale = cameraSettings.GetRenderScale(bufferSettings.renderScale);
+        useScaledRendering = renderScale < 0.99f || renderScale > 1.01f;
+
+        PrepareBuffer();
+		PrepareForSceneWindow();
+		if (!Cull(shadowSettings.maxDistance)) {
+			return;
+		}
+        
         useHDR = bufferSettings.allowHDR && camera.allowHDR;
 
         if (useScaledRendering)
@@ -113,10 +117,12 @@ public partial class CameraRenderer
         buffer.SetGlobalVector(bufferSizeId, new Vector4(1f / bufferSize.x, 1f / bufferSize.y,bufferSize.x, bufferSize.y));
 
         ExecuteBuffer();
+        bufferSettings.fxaa.enabled &= cameraSettings.allowFXAA;
         lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject,
             cameraSettings.maskLights ? cameraSettings.renderingLayerMask : -1);
         postFXStack.Setup(context, camera, bufferSize, postFXSettings, useHDR, colorLUTResolution,
-            cameraSettings.finalBlendMode, bufferSettings.bicubicRescaling);
+            cameraSettings.finalBlendMode, bufferSettings.bicubicRescaling,
+            bufferSettings.fxaa);
         buffer.EndSample(SampleName);
 		//清理Camera绘制目标
         Setup();

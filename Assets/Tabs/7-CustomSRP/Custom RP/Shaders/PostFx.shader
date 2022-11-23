@@ -132,6 +132,18 @@ Shader "Hidden/Custom RP/Post FX Stack" {
 		}		
 
 		Pass {
+			Name "Final"
+
+			Blend [_FinalSrcBlend] [_FinalDstBlend]
+			
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment ApplyColorGradingPassFragment
+			ENDHLSL
+		}
+
+		Pass {
 			Name "Final Mapping"
 
 			Blend [_FinalSrcBlend] [_FinalDstBlend]
@@ -139,9 +151,21 @@ Shader "Hidden/Custom RP/Post FX Stack" {
 			HLSLPROGRAM
 				#pragma target 3.5
 				#pragma vertex DefaultPassVertex
-				#pragma fragment FinalPassFragment
+				#pragma fragment FinalPassFragmentRescale
 			ENDHLSL
 		}	
 		
+		Pass {
+			Name "FXAA"
+
+			Blend [_FinalSrcBlend] [_FinalDstBlend]
+			
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment FXAAPassFragment
+				#include "FXAAPass.hlsl"
+			ENDHLSL
+		}
 	}
 }
