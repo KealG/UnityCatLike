@@ -85,7 +85,18 @@ public partial class PostFXStack
     bool DoBloom(int sourceId)
     {        
         PostFXSettings.BloomSettings bloom = settings.Bloom;
-        int width = camera.pixelWidth / 2, height = camera.pixelHeight / 2;
+        int width, height;
+        if (bloom.ignoreRenderScale)
+        {
+            width = camera.pixelWidth / 2;
+            height = camera.pixelHeight / 2;
+        }
+        else
+        {
+            width = bufferSize.x / 2;
+            height = bufferSize.y / 2;
+        }
+
         if (
             bloom.maxIterations == 0 ||
             height < bloom.downscaleLimit * 2 || width < bloom.downscaleLimit * 2
@@ -108,7 +119,7 @@ public partial class PostFXStack
 
         RenderTextureFormat format = useHDR ? RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default;
         buffer.GetTemporaryRT(
-            bloomPrefilterId, width, height, 0, FilterMode.Bilinear, format
+            bloomPrefilterId, bufferSize.x, bufferSize.y, 0, FilterMode.Bilinear, format
         );
         //模糊后的图层与原图混合
         Draw(sourceId, bloomPrefilterId, bloom.fadeFireflies ?
@@ -279,12 +290,13 @@ public partial class PostFXStack
         buffer.ReleaseTemporaryRT(colorGradingLUTId);
     }
 
-
+    Vector2Int bufferSize;
     public void Setup(
-        ScriptableRenderContext context, Camera camera, PostFXSettings settings,
+        ScriptableRenderContext context, Camera camera, Vector2Int bufferSize, PostFXSettings settings,
         bool useHDR, int colorLUTResolution, CameraSettings.FinalBlendMode finalBlendMode
     )
     {
+        this.bufferSize = bufferSize;
         this.colorLUTResolution = colorLUTResolution;
         this.useHDR = useHDR;
         this.context = context;

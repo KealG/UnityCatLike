@@ -38,6 +38,8 @@ public partial class CameraRenderer
 
     static bool copyTextureSupported = false;
 
+    public const float renderScaleMin = 0.1f, renderScaleMax = 2f;
+
     Vector2Int bufferSize;
     public CameraRenderer(Shader shader)
     {
@@ -71,7 +73,7 @@ public partial class CameraRenderer
         CameraSettings cameraSettings =
             crpCamera ? crpCamera.Settings : defaultCameraSettings;
 
-        float renderScale = bufferSettings.renderScale;
+        float renderScale = cameraSettings.GetRenderScale(bufferSettings.renderScale);
         useScaledRendering = renderScale < 0.99f || renderScale > 1.01f;
 
         PrepareBuffer();
@@ -93,6 +95,8 @@ public partial class CameraRenderer
 
         if (useScaledRendering)
         {
+            //限制范围
+            renderScale = Mathf.Clamp(renderScale, renderScaleMin, renderScaleMax);
             bufferSize.x = (int)(camera.pixelWidth * renderScale);
             bufferSize.y = (int)(camera.pixelHeight * renderScale);
         }
@@ -105,10 +109,13 @@ public partial class CameraRenderer
         //useDepthTexture = true;
         //开始统计本次绘制范围
         buffer.BeginSample(SampleName);
+
+        buffer.SetGlobalVector(bufferSizeId, new Vector4(1f / bufferSize.x, 1f / bufferSize.y,bufferSize.x, bufferSize.y));
+
         ExecuteBuffer();
         lighting.Setup(context, cullingResults, shadowSettings, useLightsPerObject,
             cameraSettings.maskLights ? cameraSettings.renderingLayerMask : -1);
-        postFXStack.Setup(context, camera, postFXSettings, useHDR, colorLUTResolution,
+        postFXStack.Setup(context, camera, bufferSize, postFXSettings, useHDR, colorLUTResolution,
             cameraSettings.finalBlendMode);
         buffer.EndSample(SampleName);
 		//清理Camera绘制目标
@@ -161,6 +168,7 @@ public partial class CameraRenderer
 
     //static int frameBufferId = Shader.PropertyToID("_CameraFrameBuffer");
     static int
+        bufferSizeId = Shader.PropertyToID("_CameraBufferSize"),
         colorAttachmentId = Shader.PropertyToID("_CameraColorAttachment"),
         depthAttachmentId = Shader.PropertyToID("_CameraDepthAttachment"),
         depthTextureId = Shader.PropertyToID("_CameraDepthTexture"),
@@ -312,7 +320,7 @@ public partial class CameraRenderer
         if (useDepthTexture)
         {
             buffer.GetTemporaryRT(
-                depthTextureId, camera.pixelWidth, camera.pixelHeight,
+                depthTextureId, bufferSize.x, bufferSize.y,
                 32, FilterMode.Point, RenderTextureFormat.Depth
             );
             if (copyTextureSupported) {
