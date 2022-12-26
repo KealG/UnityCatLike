@@ -9198,7 +9198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
-    copyDepth: 1
+    copyDepth: 0
+    copyColor: 1
     finalBlendMode:
       source: 1
       destination: 0
@@ -9206,6 +9207,10 @@ MonoBehaviour:
     postFXSettings: {fileID: 0}
     renderingLayerMask: -1
     maskLights: 0
+    renderScaleMode: 0
+    renderScale: 1.3
+    allowFXAA: 1
+    keepAlpha: 0
 --- !u!1 &977074005
 GameObject:
   m_ObjectHideFlags: 0

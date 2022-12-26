@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEngine.UI", "UnityEngine.UI.csproj", "{E6D385D8-FE39-1A52-396A-87077E317E71}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{F697E3C7-2C24-752D-153D-B4CDCE9B6EC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taecg.shaderReference.Editor", "taecg.shaderReference.Editor.csproj", "{F01FBF9F-B3BC-2D19-CAA1-CF1765757F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEditor.UI", "UnityEditor.UI.csproj", "{BF6393E5-82DD-C3EE-CC48-87E7ED046814}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{10DBEB6D-C356-F8AB-ED58-FBC888519832}"
 EndProject
@@ -13,6 +17,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6D385D8-FE39-1A52-396A-87077E317E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D385D8-FE39-1A52-396A-87077E317E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D385D8-FE39-1A52-396A-87077E317E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D385D8-FE39-1A52-396A-87077E317E71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F697E3C7-2C24-752D-153D-B4CDCE9B6EC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F697E3C7-2C24-752D-153D-B4CDCE9B6EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F697E3C7-2C24-752D-153D-B4CDCE9B6EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -21,6 +29,10 @@ Global
 		{F01FBF9F-B3BC-2D19-CAA1-CF1765757F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F01FBF9F-B3BC-2D19-CAA1-CF1765757F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F01FBF9F-B3BC-2D19-CAA1-CF1765757F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6393E5-82DD-C3EE-CC48-87E7ED046814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6393E5-82DD-C3EE-CC48-87E7ED046814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6393E5-82DD-C3EE-CC48-87E7ED046814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6393E5-82DD-C3EE-CC48-87E7ED046814}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10DBEB6D-C356-F8AB-ED58-FBC888519832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10DBEB6D-C356-F8AB-ED58-FBC888519832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10DBEB6D-C356-F8AB-ED58-FBC888519832}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -64,8 +64,10 @@ public class Lighting {
 	}
 
 	void SetupLights (bool useLightsPerObject, int renderingLayerMask) {
+		//所有光索引的数组
 		NativeArray<int> indexMap = useLightsPerObject ?
 			cullingResults.GetLightIndexMap(Allocator.Temp) : default;
+		//可见光的长度
 		NativeArray<VisibleLight> visibleLights = cullingResults.visibleLights;
 		int dirLightCount = 0, otherLightCount = 0;
 		int i;
@@ -107,6 +109,7 @@ public class Lighting {
 		}
 
 		if (useLightsPerObject) {
+			//清除所有不可见光的索引信息
 			for (; i < indexMap.Length; i++) {
 				indexMap[i] = -1;
 			}
@@ -147,6 +150,7 @@ public class Lighting {
 		int index, int visibleIndex, ref VisibleLight visibleLight, Light light
     ) {
 		dirLightColors[index] = visibleLight.finalColor;
+        //储存主光方向 有疑问参考：https://zhuanlan.zhihu.com/p/163360207
         Vector4 dirAndMask = -visibleLight.localToWorldMatrix.GetColumn(2);
         dirAndMask.w = light.renderingLayerMask.ReinterpretAsFloat();
         dirLightDirectionsAndMasks[index] = dirAndMask;

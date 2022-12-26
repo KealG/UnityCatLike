@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "Assets/Tabs/7-CustomSRP"
+		},
+		{
+			"path": "Library/PackageCache/com.unity.render-pipelines.universal@10.10.1"
+		},
+		{
+			"path": "../ShaderSource-2020.3.41/builtin_shaders-2020.3.41f1"
+		},
+		{
+			"path": "Assets/Tabs/8-AdvancedRendering"
+		},
+		{
+			"path": "Assets/ShaderBook/Shader/Shader-Tutorial"
+		}
+	]
+}
