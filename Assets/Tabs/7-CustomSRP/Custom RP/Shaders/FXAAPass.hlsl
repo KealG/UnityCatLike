@@ -195,7 +195,7 @@ float4 FXAAPassFragment (Varyings input) : SV_TARGET {
 
 	FXAAEdge edge = GetFXAAEdge(luma);
 	float blendFactor = max(
-		GetSubpixelBlendFactor(luma), GetEdgeBlendFactor (luma, edge, input.screenUV)
+		GetSubpixelBlendFactor(luma), GetEdgeBlendFactor(luma, edge, input.screenUV)
 	);
 	// return blendFactor;
 	float2 blendUV = input.screenUV;
