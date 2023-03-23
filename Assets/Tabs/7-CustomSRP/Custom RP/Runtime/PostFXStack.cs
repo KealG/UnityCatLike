@@ -127,7 +127,7 @@ public partial class PostFXStack
         buffer.GetTemporaryRT(
             bloomPrefilterId, bufferSize.x, bufferSize.y, 0, FilterMode.Bilinear, format
         );
-        //Ä£ºıºóµÄÍ¼²ãÓëÔ­Í¼»ìºÏ
+        //æ¨¡ç³Šåçš„å›¾å±‚ä¸åŸå›¾æ··åˆ
         Draw(sourceId, bloomPrefilterId, bloom.fadeFireflies ?
                 Pass.BloomPrefilterFireflies : Pass.BloomPrefilter);
         width /= 2;
@@ -210,7 +210,7 @@ public partial class PostFXStack
         return true;
     }
 
-    //É«µ÷
+    //è‰²è°ƒ
     void ConfigureColorAdjustments()
     {
         ColorAdjustmentsSettings colorAdjustments = settings.ColorAdjustments;
@@ -223,17 +223,17 @@ public partial class PostFXStack
         buffer.SetGlobalColor(colorFilterId, colorAdjustments.colorFilter.linear);
     }
 
-    //°×Æ½ºâ
+    //ç™½å¹³è¡¡
     void ConfigureWhiteBalance()
     {
         WhiteBalanceSettings whiteBalance = settings.WhiteBalance;
-        //ÉèÖÃÉ«ÎÂÓëÎÂ¶È±ä»¯µÄÑÕÉ«
+        //è®¾ç½®è‰²æ¸©ä¸æ¸©åº¦å˜åŒ–çš„é¢œè‰²
         buffer.SetGlobalVector(whiteBalanceId, ColorUtils.ColorBalanceToLMSCoeffs(
             whiteBalance.temperature, whiteBalance.tint
         ));
     }
 
-    //·ÖÀëÉ«µ÷
+    //åˆ†ç¦»è‰²è°ƒ
     void ConfigureSplitToning()
     {
         SplitToningSettings splitToning = settings.SplitToning;
@@ -366,7 +366,7 @@ public partial class PostFXStack
                 bicubicRescaling == CameraBufferSettings.BicubicRescalingMode.UpAndDown ||
                 bicubicRescaling == CameraBufferSettings.BicubicRescalingMode.UpOnly &&
                 bufferSize.x < camera.pixelWidth;
-            //ÊÇ·ñÆôÓÃË«Èı´Î²ÉÑù£¬È¥¾õµÃÏà»úbufferµÄÉèÖÃ
+            //æ˜¯å¦å¯ç”¨åŒä¸‰æ¬¡é‡‡æ ·ï¼Œå»è§‰å¾—ç›¸æœºbufferçš„è®¾ç½®
             buffer.SetGlobalFloat(copyBicubicId, bicubicSampling ? 1f : 0f);
             DrawFinal(finalResultId, Pass.FinalRescale);
             buffer.ReleaseTemporaryRT(finalResultId);
@@ -440,7 +440,7 @@ public partial class PostFXStack
 
     CameraBufferSettings.BicubicRescalingMode bicubicRescaling;
     /// <summary>
-    /// ºó´¦ÀíÕë¶Ô¶àÏà»ú¶îÍâÊÊÅä´¦Àí
+    /// åå¤„ç†é’ˆå¯¹å¤šç›¸æœºé¢å¤–é€‚é…å¤„ç†
     /// </summary>
     /// <param name="from"></param>
     void DrawFinal(RenderTargetIdentifier from, Pass pass)

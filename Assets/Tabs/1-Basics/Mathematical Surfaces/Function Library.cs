@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BasicChapter
 {
-    public static class FunctionLibrary
+    public static class CustomFunctionLibrary
     {
         public delegate float m_FuncPtr(float x, float z, float t);
 

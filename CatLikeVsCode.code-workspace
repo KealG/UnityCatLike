@@ -14,6 +14,9 @@
 		},
 		{
 			"path": "Assets/ShaderBook/Shader/Shader-Tutorial"
+		},
+		{
+			"path": "Assets/Tabs/1-Basics"
 		}
 	]
 }

@@ -14,7 +14,7 @@ public class GraphAni : MonoBehaviour
     Transform[] points;
 
     [SerializeField]
-    FunctionLibrary.FuncName function;
+    FunctionLibrary.FunctionName function;
 
     private void Awake()
     {
@@ -48,7 +48,7 @@ public class GraphAni : MonoBehaviour
     
     void Update()
     {
-        FunctionLibrary.m_FuncPtr f = FunctionLibrary.GetFunction(function);
+        FunctionLibrary.Function f = FunctionLibrary.GetFunction(function);
         if (points != null && points.Length > 0)
         {
             for (int i = 0; i < points.Length; i++)
@@ -57,7 +57,7 @@ public class GraphAni : MonoBehaviour
                 if (curPoint != null)
                 {                    
                     var curLocalPos = curPoint.localPosition;
-                    curLocalPos.y = f != null ? f(curLocalPos.x, curLocalPos.z, Time.time): curLocalPos.y;
+                    curLocalPos.y = f != null ? f(curLocalPos.x, curLocalPos.z, Time.time).y: curLocalPos.y;
                     curPoint.localPosition = curLocalPos;
                     //if (function == 0)
                     //{
